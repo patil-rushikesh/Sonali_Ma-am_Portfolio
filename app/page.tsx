@@ -16,12 +16,37 @@ export default function HomePage() {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="relative py-20 px-4">
-        <div className="container mx-auto max-w-4xl text-center">
-          <div className="animate-fade-in-up">
+      <section className="relative py-20 px-4 overflow-hidden">
+        {/* Blurred background image, content stays sharp */}
+        <div
+          className="pointer-events-none absolute inset-0 z-0 w-full h-full"
+          aria-hidden="true"
+        >
+          <div
+            className="w-full h-full"
+            style={{
+              backgroundImage: "url('/sonaliPatilherobg.jpg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              filter: "brightness(0.5)",
+              width: "100%",
+              height: "100%",
+            }}
+          />
+          {/* Responsive override for mobile: background image on right */}
+          <style>{`
+            @media (max-width: 640px) {
+              [aria-hidden="true"] > div {
+                background-position: right center !important;
+              }
+            }
+          `}</style>
+        </div>
+        <div className="container mx-auto max-w-4xl text-center relative z-10">
+          <div className="animate-fade-in-up ">
             <h1 className="font-serif text-5xl md:text-7xl font-bold mb-6 leading-tight">
-              <span className="gradient-text animate-shimmer">Welcome to My</span>
-              <span className="block text-muted-foreground animate-fade-in-up animate-delay-200">Portfolio</span>
+              <span className="text-white animate-shimmer">Welcome to My</span>
+              <span className="block text-white animate-fade-in-up animate-delay-200">Portfolio</span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed animate-fade-in-up animate-delay-300">
               Discover my journey through talks delivered, intellectual property rights, learning resources, and
