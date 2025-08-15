@@ -37,7 +37,7 @@ export function Navigation() {
             {navigationItems.map((item, index) => (
               <Button
                 key={item.href}
-                variant={pathname === item.href ? "default" : "ghost"}
+                variant={pathname === item.href ? "ghost" : "ghost"}
                 asChild
                 className={cn(
                   "text-sm font-medium transition-all duration-300 hover-lift btn-premium animate-fade-in-down",

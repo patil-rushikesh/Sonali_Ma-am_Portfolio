@@ -28,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${playfairDisplay.variable} ${dmSans.variable} antialiased`}>
-      <body className="min-h-screen bg-background text-foreground">{children}</body>
+      <body className="h-screen bg-background text-foreground">{children}</body>
     </html>
   )
 }
