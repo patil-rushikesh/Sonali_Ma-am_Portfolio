@@ -1,12 +1,38 @@
-import { Navigation } from "@/components/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { ScrollReveal } from "@/components/scroll-reveal"
-import Link from "next/link"
+"use client";
 
+import { Navigation } from "@/components/navigation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { ScrollReveal } from "@/components/scroll-reveal";
+import Link from "next/link";
+import LocomotiveScroll from "locomotive-scroll";
+import { useRef, useEffect } from "react";
+import Image from "next/image";
 export default function HomePage() {
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    let scroll: LocomotiveScroll | null = null;
+    if (typeof window !== "undefined" && scrollRef.current) {
+      scroll = new LocomotiveScroll({
+        el: scrollRef.current,
+        smooth: true,
+        lerp: 0,
+      });
+    }
+    return () => {
+      if (scroll) {
+        scroll.destroy();
+      }
+    };
+  }, []);
+
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div
+      ref={scrollRef}
+      className="min-h-screen relative overflow-hidden"
+      data-scroll-container
+    >
+
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-black/5 to-transparent rounded-full animate-float"></div>
         <div className="absolute top-40 right-20 w-24 h-24 bg-gradient-to-br from-black/3 to-transparent rounded-full animate-float animate-delay-200"></div>
@@ -15,23 +41,34 @@ export default function HomePage() {
 
       <Navigation />
 
-      {/* Hero Section */}
       <section className="relative py-20 px-4">
         <div className="container mx-auto max-w-4xl text-center">
           <div className="animate-fade-in-up">
             <h1 className="font-serif text-5xl md:text-7xl font-bold mb-6 leading-tight">
-              <span className="gradient-text animate-shimmer">Welcome to My</span>
-              <span className="block text-muted-foreground animate-fade-in-up animate-delay-200">Portfolio</span>
+              <span className="gradient-text animate-shimmer">Hello, I'm </span>
+              <span className="block text-muted-foreground animate-fade-in-up animate-delay-200">
+                Dr. Sonali Patil
+              </span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed animate-fade-in-up animate-delay-300">
-              Discover my journey through talks delivered, intellectual property rights, learning resources, and
-              creative works in this modern, minimal showcase.
+              ACM Senior Member | Chair - IEEE Pune Blockchain Group Professor &
+              Head, Computer Engineering Department, Pimpri Chinchwad College of
+              Engineering (PCCOE), Pune
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up animate-delay-400">
-              <Button asChild size="lg" className="text-base btn-premium hover-lift">
+              <Button
+                asChild
+                size="lg"
+                className="text-base btn-premium hover-lift"
+              >
                 <Link href="/about">Learn About Me</Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="text-base bg-transparent hover-glow">
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="text-base bg-transparent hover-glow"
+              >
                 <Link href="/talks">View My Talks</Link>
               </Button>
             </div>
@@ -51,37 +88,43 @@ export default function HomePage() {
             {[
               {
                 title: "Talks Delivered",
-                description: "Presentations and speaking engagements across various topics and conferences.",
+                description:
+                  "Presentations and speaking engagements across various topics and conferences.",
                 href: "/talks",
                 icon: "🎤",
               },
               {
                 title: "IPR Portfolio",
-                description: "Intellectual property rights, patents, and innovative solutions developed.",
+                description:
+                  "Intellectual property rights, patents, and innovative solutions developed.",
                 href: "/ipr",
                 icon: "⚖️",
               },
               {
                 title: "Learning Resources",
-                description: "Curated educational materials, courses, and knowledge-sharing content.",
+                description:
+                  "Curated educational materials, courses, and knowledge-sharing content.",
                 href: "/resources",
                 icon: "📚",
               },
               {
                 title: "Gallery",
-                description: "Visual showcase of projects, achievements, and creative endeavors.",
+                description:
+                  "Visual showcase of projects, achievements, and creative endeavors.",
                 href: "/gallery",
                 icon: "🖼️",
               },
               {
                 title: "About Me",
-                description: "Personal background, expertise, and professional journey overview.",
+                description:
+                  "Personal background, expertise, and professional journey overview.",
                 href: "/about",
                 icon: "👤",
               },
               {
                 title: "Contact",
-                description: "Get in touch for collaborations, inquiries, or professional connections.",
+                description:
+                  "Get in touch for collaborations, inquiries, or professional connections.",
                 href: "/contact",
                 icon: "📧",
               },
@@ -91,11 +134,15 @@ export default function HomePage() {
                   <CardContent className="p-6 relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-shimmer"></div>
                     <div className="relative z-10">
-                      <div className="text-3xl mb-4 animate-bounce-subtle group-hover:animate-float">{item.icon}</div>
+                      <div className="text-3xl mb-4 animate-bounce-subtle group-hover:animate-float">
+                        {item.icon}
+                      </div>
                       <h3 className="font-serif text-xl font-semibold mb-3 group-hover:text-primary transition-colors duration-300">
                         {item.title}
                       </h3>
-                      <p className="text-muted-foreground mb-4 leading-relaxed">{item.description}</p>
+                      <p className="text-muted-foreground mb-4 leading-relaxed">
+                        {item.description}
+                      </p>
                       <Button
                         asChild
                         variant="outline"
@@ -112,5 +159,5 @@ export default function HomePage() {
         </div>
       </section>
     </div>
-  )
+  );
 }
