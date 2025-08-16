@@ -513,53 +513,6 @@ export default function IPRPage() {
 			</section> */}
 
 
-
-			{/* Process Section */}
-			<section className="py-16 px-4">
-				<div className="container mx-auto max-w-4xl">
-					<h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12">IPR Development Process</h2>
-					<div className="space-y-8">
-						{[
-							{
-								step: "01",
-								title: "Innovation & Research",
-								description: "Identify novel solutions and conduct thorough prior art research to ensure uniqueness.",
-							},
-							{
-								step: "02",
-								title: "Documentation & Filing",
-								description: "Prepare comprehensive documentation and file applications with relevant IP offices.",
-							},
-							{
-								step: "03",
-								title: "Examination & Prosecution",
-								description: "Navigate the examination process and respond to office actions to secure rights.",
-							},
-							{
-								step: "04",
-								title: "Protection & Enforcement",
-								description: "Monitor for infringement and take appropriate action to protect IP assets.",
-							},
-						].map((item, index) => (
-							<Card key={index} className="animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
-								<CardContent className="p-6">
-									<div className="flex items-start gap-6">
-										<div className="flex-shrink-0">
-											<div className="w-12 h-12 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold">
-												{item.step}
-											</div>
-										</div>
-										<div className="flex-grow">
-											<h3 className="font-serif text-xl font-semibold mb-2">{item.title}</h3>
-											<p className="text-muted-foreground leading-relaxed">{item.description}</p>
-										</div>
-									</div>
-								</CardContent>
-							</Card>
-						))}
-					</div>
-				</div>
-			</section>
 			<Footer/>
 		</div>
 	)

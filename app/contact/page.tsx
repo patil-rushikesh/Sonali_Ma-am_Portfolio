@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Mail, Phone, MapPin, Send, Clock, MessageSquare } from "lucide-react"
 import { useState } from "react"
+import Footer from "@/components/footer";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -35,7 +36,7 @@ export default function ContactPage() {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="py-16 px-4">
+      <section className=" px-4">
         <div className="container mx-auto max-w-6xl text-center">
           <div className="animate-fade-in-up">
             <h1 className="font-serif text-4xl md:text-5xl font-bold text-foreground mb-6">Contact</h1>
@@ -165,7 +166,7 @@ export default function ContactPage() {
                       <MapPin className="w-5 h-5 text-primary" />
                       <div>
                         <p className="font-medium">Location</p>
-                        <p className="text-muted-foreground">Available globally for remote collaboration</p>
+                        <p className="text-muted-foreground">Pune, Maharashtra</p>
                       </div>
                     </div>
                   </CardContent>
@@ -183,33 +184,15 @@ export default function ContactPage() {
                     referrerPolicy="no-referrer-when-downgrade"
                   ></iframe>
                 </div>
-                
+
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Call to Action */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold mb-6">Let's Create Something Amazing Together</h2>
-          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
-            Whether you're looking for a speaker, consultant, or collaborator, I'm excited to explore how we can work
-            together to drive innovation and create meaningful impact.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="text-base">
-              <Mail className="w-4 h-4 mr-2" />
-              Start a Conversation
-            </Button>
-            <Button variant="outline" size="lg" className="text-base bg-transparent">
-              <Phone className="w-4 h-4 mr-2" />
-              Schedule a Call
-            </Button>
-          </div>
-        </div>
-      </section>
+      {/* Footer */}
+      <Footer />
     </div>
   )
 }
