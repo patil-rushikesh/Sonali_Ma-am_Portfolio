@@ -14,7 +14,7 @@ import { CalendarDays, ExternalLink } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+import Footer from "@/components/footer";
 interface Talk {
   _id: string;
   name: string;
@@ -243,6 +243,7 @@ export default function TalksPage() {
           </div>
         </div>
       </section>
+      <Footer/>
     </div>
   );
 }

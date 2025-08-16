@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { FileText, Shield, Lightbulb, Award, Calendar, ExternalLink } from "lucide-react"
 import { useEffect, useState } from "react"
-
+import Footer from '@/components/footer';
 const iprTypes = [
 	{
 		icon: <FileText className="w-8 h-8" />,
@@ -599,6 +599,7 @@ export default function IPRPage() {
 					</div>
 				</div>
 			</section>
+			<Footer/>
 		</div>
 	)
 }

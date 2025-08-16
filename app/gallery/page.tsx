@@ -3,6 +3,7 @@
 import { Navigation } from "@/components/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { Fragment, useRef, useEffect, useState } from "react"
+import  Footer  from "@/components/footer";
 
 interface GalleryItem {
   _id: string;
@@ -185,6 +186,7 @@ export default function GalleryPage() {
           </div>
         </div>
       </section>
+      <Footer/>
     </div>
   )
 }

@@ -7,6 +7,7 @@ import { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import axios from "axios";
+import  Footer  from "@/components/footer";
 
 const About = () => {
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -292,20 +293,7 @@ const About = () => {
         </div>
       </section>
 
-      {/* Philosophy Section */}
-      <section className="py-16 px-4" ref={philosophyRef}>
-        <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold mb-8">
-            My Philosophy
-          </h2>
-          <blockquote className="text-xl md:text-2xl text-muted-foreground italic leading-relaxed max-w-3xl mx-auto">
-            "Knowledge shared is knowledge multiplied. Every presentation, every
-            resource created, and every innovation developed should serve to
-            elevate others and contribute to collective growth."
-          </blockquote>
-          <div className="mt-8 w-16 h-0.5 bg-primary mx-auto"></div>
-        </div>
-      </section>
+     <Footer/>
     </div>
   );
 };
