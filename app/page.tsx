@@ -80,12 +80,12 @@ export default function HomePage() {
         <div className="container mx-auto max-w-4xl text-center relative z-10">
           <div className="animate-fade-in-up ">
             <h1 className="font-serif text-5xl md:text-7xl font-bold mb-6 leading-tight">
-              <span className="gradient-text animate-shimmer">Hello, I'm </span>
-              <span className="block text-muted-foreground animate-fade-in-up animate-delay-200">
+              <span className="text-white animate-shimmer">Hello, I'm </span>
+              <span className="block text-white animate-fade-in-up animate-delay-200">
                 Dr. Sonali Patil
               </span>
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed animate-fade-in-up animate-delay-300">
+            <p className="text-lg md:text-xl text-white mb-8 max-w-2xl mx-auto leading-relaxed animate-fade-in-up animate-delay-300">
               ACM Senior Member | Chair - IEEE Pune Blockchain Group Professor &
               Head, Computer Engineering Department, Pimpri Chinchwad College of
               Engineering (PCCOE), Pune
