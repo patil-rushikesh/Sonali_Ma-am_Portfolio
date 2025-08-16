@@ -7,7 +7,14 @@ import { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import axios from "axios";
-import  Footer  from "@/components/footer";
+import Footer from "@/components/footer";
+
+// Loader component
+const Loader = () => (
+  <div className="flex justify-center items-center py-12">
+    <span className="inline-block w-10 h-10 rounded-full border-4 border-black border-t-transparent animate-spin"></span>
+  </div>
+);
 
 const About = () => {
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -222,11 +229,7 @@ const About = () => {
             Professional Journey
           </h2>
           <div className="space-y-8">
-            {!experience && (
-              <div className="text-center text-muted-foreground py-8">
-                Loading experience...
-              </div>
-            )}
+            {!experience && <Loader />}
             {experience && experience.length === 0 && (
               <div className="text-center text-muted-foreground py-8">
                 No experience found.
@@ -241,8 +244,8 @@ const About = () => {
                 const end = item.currentlyWorking
                   ? "Present"
                   : item.endMonth && item.endYear
-                  ? `${String(item.endMonth).padStart(2, "0")}/${item.endYear}`
-                  : "";
+                    ? `${String(item.endMonth).padStart(2, "0")}/${item.endYear}`
+                    : "";
                 const period = start && end ? `${start} - ${end}` : "";
 
                 return (
@@ -277,7 +280,7 @@ const About = () => {
         </div>
       </section>
 
-     <Footer/>
+      <Footer />
     </div>
   );
 };

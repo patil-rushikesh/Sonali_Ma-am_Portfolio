@@ -18,6 +18,12 @@ interface GalleryItem {
   updatedAt: string;
 }
 
+const Loader = () => (
+  <div className="flex justify-center items-center py-12">
+    <span className="inline-block w-10 h-10 rounded-full border-4 border-black border-t-transparent animate-spin"></span>
+  </div>
+);
+
 export default function GalleryPage() {
   
 
@@ -56,45 +62,49 @@ export default function GalleryPage() {
       {/* Gallery Grid */}
       <section className="px-4">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {gallery.map((item, index) => (
-              <Card
-                key={item._id}
-                className="group cursor-pointer hover:shadow-xl transition-all duration-300 animate-fade-in-up"
-                style={{ animationDelay: `${index * 100}ms` }}
-                onClick={() => setSelectedItem(item)}
-              >
-                <div className="relative overflow-hidden">
-                  <img
-                    src={item.image?.url || "/placeholder.svg"}
-                    alt={item.title}
-                    width={400}
-                    height={300}
-                    className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-                    {/* Optionally add an overlay icon here */}
+          {!gallery.length ? (
+            <Loader />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {gallery.map((item, index) => (
+                <Card
+                  key={item._id}
+                  className="group cursor-pointer hover:shadow-xl transition-all duration-300 animate-fade-in-up"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                  onClick={() => setSelectedItem(item)}
+                >
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={item.image?.url || "/placeholder.svg"}
+                      alt={item.title}
+                      width={400}
+                      height={300}
+                      className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                      {/* Optionally add an overlay icon here */}
+                    </div>
+                    <div className="absolute top-4 left-4">
+                      <span className="bg-background/90 text-foreground px-2 py-1 rounded text-xs font-medium shadow">
+                        {item.location}
+                      </span>
+                    </div>
                   </div>
-                  <div className="absolute top-4 left-4">
-                    <span className="bg-background/90 text-foreground px-2 py-1 rounded text-xs font-medium shadow">
-                      {item.location}
-                    </span>
-                  </div>
-                </div>
-                <CardContent className="p-4">
-                  <h3 className="font-serif text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
-                    {item.title}
-                  </h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2 mb-3">
-                    {item.shortDescription}
-                  </p>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <span>Created: {new Date(item.createdAt).toLocaleDateString()}</span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                  <CardContent className="p-4">
+                    <h3 className="font-serif text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2 mb-3">
+                      {item.shortDescription}
+                    </p>
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <span>Created: {new Date(item.createdAt).toLocaleDateString()}</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

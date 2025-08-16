@@ -12,6 +12,13 @@ import { Mail, Phone, MapPin, Send, Clock, MessageSquare } from "lucide-react"
 import { useState } from "react"
 import Footer from "@/components/footer";
 
+// Loader component
+const Loader = () => (
+  <div className="flex justify-center items-center py-12">
+    <span className="inline-block w-10 h-10 rounded-full border-4 border-black border-t-transparent animate-spin"></span>
+  </div>
+);
+
 export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: "",

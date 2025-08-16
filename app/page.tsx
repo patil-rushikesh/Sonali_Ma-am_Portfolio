@@ -22,6 +22,13 @@ interface Testimonial {
   updatedAt: string;
 }
 
+// Loader component
+const Loader = () => (
+  <div className="flex justify-center items-center py-12">
+    <span className="inline-block w-10 h-10 rounded-full border-4 border-black border-t-transparent animate-spin"></span>
+  </div>
+);
+
 export default function HomePage() {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
@@ -197,7 +204,9 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {testimonials &&
+            {!testimonials.length ? (
+              <Loader />
+            ) : (
               testimonials.map((testimonial) => (
                 <Card
                   key={testimonial._id}
@@ -230,7 +239,8 @@ export default function HomePage() {
                     </div>
                   </CardContent>
                 </Card>
-              ))}
+              ))
+            )}
           </div>
         </div>
       </section>

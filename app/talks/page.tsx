@@ -8,7 +8,6 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CalendarDays, ExternalLink } from "lucide-react";
 import Image from "next/image";
@@ -27,6 +26,13 @@ interface Talk {
   createdAt: string;
   updatedAt: string;
 }
+
+// Loader component
+const Loader = () => (
+  <div className="flex justify-center items-center py-12">
+    <span className="inline-block w-10 h-10 rounded-full border-4 border-black border-t-transparent animate-spin"></span>
+  </div>
+);
 
 export default function TalksPage() {
   const [talks, setTalks] = useState<Talk[]>([]);
@@ -74,58 +80,62 @@ export default function TalksPage() {
       {/* Talks Grid */}
       <section className="px-4">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {talks.map((talk, index) => (
-              <Card
-                key={talk._id}
-                className="group hover:shadow-xl transition-all duration-300 animate-fade-in-up overflow-hidden cursor-pointer"
-                style={{ animationDelay: `${index * 100}ms` }}
-                onClick={() => {
-                  setSelectedTalk(talk);
-                  setDialogOpen(true);
-                }}
-              >
-                <div className="relative overflow-hidden">
-                  <Image
-                    src={talk.image?.url || "/placeholder.svg"}
-                    alt={talk.name}
-                    width={300}
-                    height={200}
-                    className="w-full object-cover bg-center group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-                <CardHeader className="pb-3">
-                  <h3 className="font-serif text-xl font-semibold group-hover:text-primary transition-colors line-clamp-2">
-                    {talk.name}
-                  </h3>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <p className="text-muted-foreground mb-4 leading-relaxed line-clamp-3">
-                    {talk.description}
-                  </p>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4">
-                    <CalendarDays className="w-4 h-4" />
-                    <span>{new Date(talk.createdAt).toLocaleDateString()}</span>
+          {!talks.length ? (
+            <Loader />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {talks.map((talk, index) => (
+                <Card
+                  key={talk._id}
+                  className="group hover:shadow-xl transition-all duration-300 animate-fade-in-up overflow-hidden cursor-pointer"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                  onClick={() => {
+                    setSelectedTalk(talk);
+                    setDialogOpen(true);
+                  }}
+                >
+                  <div className="relative overflow-hidden">
+                    <Image
+                      src={talk.image?.url || "/placeholder.svg"}
+                      alt={talk.name}
+                      width={300}
+                      height={200}
+                      className="w-full object-cover bg-center group-hover:scale-105 transition-transform duration-300"
+                    />
                   </div>
-                  <Button
-                    asChild
-                    variant="outline"
-                    className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors bg-transparent"
-                  >
-                    <a
-                      href={talk.referenceLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
+                  <CardHeader className="pb-3">
+                    <h3 className="font-serif text-xl font-semibold group-hover:text-primary transition-colors line-clamp-2">
+                      {talk.name}
+                    </h3>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <p className="text-muted-foreground mb-4 leading-relaxed line-clamp-3">
+                      {talk.description}
+                    </p>
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4">
+                      <CalendarDays className="w-4 h-4" />
+                      <span>{new Date(talk.createdAt).toLocaleDateString()}</span>
+                    </div>
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors bg-transparent"
                     >
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      View Reference
-                    </a>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                      <a
+                        href={talk.referenceLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        View Reference
+                      </a>
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

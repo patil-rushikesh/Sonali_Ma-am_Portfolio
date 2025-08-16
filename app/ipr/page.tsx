@@ -104,6 +104,13 @@ interface ResearchGrant {
 	updatedAt: string;
 }
 
+// Loader component
+const Loader = () => (
+  <div className="flex justify-center items-center py-12">
+    <span className="inline-block w-10 h-10 rounded-full border-4 border-black border-t-transparent animate-spin"></span>
+  </div>
+);
+
 export default function IPRPage() {
 	const [activeTab, setActiveTab] = useState("publication")
 	const [activeSubTab, setActiveSubTab] = useState({
@@ -216,6 +223,7 @@ export default function IPRPage() {
 	// Helper to render content for each tab/sub-tab
 	function renderTabContent() {
 		if (activeTab === "publication") {
+			if (!publicationData.length) return <Loader />;
 			const filtered = publicationData.filter(
 				(pub) => pub.type === activeSubTab.publication
 			);
@@ -255,6 +263,7 @@ export default function IPRPage() {
 			}
 		}
 		if (activeTab === "patents") {
+			if (!patentData.length) return <Loader />;
 			const filtered = patentData.filter(
 				(pat) =>
 					(activeSubTab.patents === "international" && pat.type === "International") ||
@@ -290,6 +299,7 @@ export default function IPRPage() {
 			)
 		}
 		if (activeTab === "copyrights") {
+			if (!copyrightData.length) return <Loader />;
 			return (
 				<div>
 					{copyrightData.length === 0 && (
@@ -320,6 +330,7 @@ export default function IPRPage() {
 			)
 		}
 		if (activeTab === "startups") {
+			if (!startupData.length) return <Loader />;
 			return (
 				<div>
 					{startupData.length === 0 && (
@@ -360,6 +371,7 @@ export default function IPRPage() {
 			)
 		}
 		if (activeTab === "research-grant") {
+			if (!researchGrantData.length) return <Loader />;
 			return (
 				<div>
 					{researchGrantData.length === 0 && (
