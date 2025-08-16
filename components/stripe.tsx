@@ -35,16 +35,26 @@ export default function Stripe() {
         el: document.querySelector("[data-scroll-container]") as HTMLElement,
         smooth: true,
       });
+      let reverseTimeout: NodeJS.Timeout | null = null;
       scroll.on("scroll", (obj: any) => {
         const currentY = obj.scroll.y;
         if (currentY > lastY) {
-          // scrolling down → forward
+          // scrolling down → always forward
           tween?.play();
           setDirection("right");
+          if (reverseTimeout) {
+            clearTimeout(reverseTimeout);
+            reverseTimeout = null;
+          }
         } else if (currentY < lastY) {
-          // scrolling up → reverse
+          // scrolling up → reverse, but only for a short time
           tween?.reverse();
           setDirection("left");
+          if (reverseTimeout) clearTimeout(reverseTimeout);
+          reverseTimeout = setTimeout(() => {
+            tween?.play();
+            setDirection("right");
+          }, 1200); // reverse for 1.2s, then resume forward
         }
         lastY = currentY;
       });
