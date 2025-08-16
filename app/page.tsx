@@ -5,21 +5,31 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import Link from "next/link";
-import LocomotiveScroll from "locomotive-scroll";
 import { useRef, useEffect } from "react";
-import Image from "next/image";
 export default function HomePage() {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
-    let scroll: LocomotiveScroll | null = null;
-    if (typeof window !== "undefined" && scrollRef.current) {
-      scroll = new LocomotiveScroll({
-        el: scrollRef.current,
-        smooth: true,
-        lerp: 0,
-      });
+    let scroll: any = null;
+    let isMounted = true;
+    async function initLoco() {
+      if (typeof window !== "undefined" && scrollRef.current) {
+        try {
+          const LocomotiveScroll = (await import("locomotive-scroll")).default;
+          if (!isMounted) return;
+          scroll = new LocomotiveScroll({
+            el: scrollRef.current,
+            smooth: true,
+            lerp: 0.08,
+          });
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.error("Locomotive Scroll failed to load:", err);
+        }
+      }
     }
+    initLoco();
     return () => {
+      isMounted = false;
       if (scroll) {
         scroll.destroy();
       }
