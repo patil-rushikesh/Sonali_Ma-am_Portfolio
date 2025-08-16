@@ -11,7 +11,6 @@ import { Label } from "@/components/ui/label"
 import { Mail, Phone, MapPin, Send, Clock, MessageSquare } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import Footer from "@/components/footer";
-import LocomotiveScroll from "locomotive-scroll"
 
 // Loader component
 const Loader = () => (
@@ -33,14 +32,17 @@ export default function ContactPage() {
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!scrollRef.current) return
-    const scroll = new LocomotiveScroll({
-      el: scrollRef.current,
-      smooth: true,
-      lerp: 0.08,
+    let scroll: any
+    import("locomotive-scroll").then((LocomotiveScroll) => {
+      if (!scrollRef.current) return
+      scroll = new LocomotiveScroll.default({
+        el: scrollRef.current,
+        smooth: true,
+        lerp: 0.08,
+      })
     })
     return () => {
-      scroll.destroy()
+      if (scroll) scroll.destroy()
     }
   }, [])
 

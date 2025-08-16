@@ -4,9 +4,6 @@ import { Navigation } from "@/components/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { Fragment, useRef, useEffect, useState } from "react"
 import Footer from "@/components/footer"
-// @ts-ignore
-import LocomotiveScroll from "locomotive-scroll"
-import "locomotive-scroll/dist/locomotive-scroll.css"
 
 interface GalleryItem {
   _id: string;
@@ -47,14 +44,17 @@ export default function GalleryPage() {
   }, [])
 
   useEffect(() => {
-    if (!scrollRef.current) return
-    const scroll = new LocomotiveScroll({
-      el: scrollRef.current,
-      smooth: true,
-      lerp: 0.08,
+    let scroll: any
+    import("locomotive-scroll").then((LocomotiveScroll) => {
+      if (!scrollRef.current) return
+      scroll = new LocomotiveScroll.default({
+        el: scrollRef.current,
+        smooth: true,
+        lerp: 0.08,
+      })
     })
     return () => {
-      scroll.destroy()
+      if (scroll) scroll.destroy()
     }
   }, [])
 

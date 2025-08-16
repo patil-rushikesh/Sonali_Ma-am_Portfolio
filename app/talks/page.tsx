@@ -14,9 +14,6 @@ import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import Footer from "@/components/footer";
-// @ts-ignore
-import LocomotiveScroll from "locomotive-scroll";
-import "locomotive-scroll/dist/locomotive-scroll.css";
 
 interface Talk {
   _id: string;
@@ -45,14 +42,17 @@ export default function TalksPage() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!scrollRef.current) return;
-    const scroll = new LocomotiveScroll({
-      el: scrollRef.current,
-      smooth: true,
-      lerp: 0.08,
+    let scroll: any;
+    import("locomotive-scroll").then((LocomotiveScroll) => {
+      if (!scrollRef.current) return;
+      scroll = new LocomotiveScroll.default({
+        el: scrollRef.current,
+        smooth: true,
+        lerp: 0.08,
+      });
     });
     return () => {
-      scroll.destroy();
+      if (scroll) scroll.destroy();
     };
   }, []);
 

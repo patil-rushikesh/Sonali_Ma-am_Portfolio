@@ -6,9 +6,6 @@ import { Button } from "@/components/ui/button"
 import { FileText, Shield, Lightbulb, Award, Calendar, ExternalLink } from "lucide-react"
 import { useEffect, useState, useRef } from "react"
 import Footer from '@/components/footer';
-// @ts-ignore
-import LocomotiveScroll from "locomotive-scroll"
-import "locomotive-scroll/dist/locomotive-scroll.css"
 
 const iprTypes = [
 	{
@@ -189,14 +186,17 @@ export default function IPRPage() {
 	}, [])
 
 	useEffect(() => {
-		if (!scrollRef.current) return
-		const scroll = new LocomotiveScroll({
-			el: scrollRef.current,
-			smooth: true,
-			lerp: 0.08,
+		let scroll: any
+		import("locomotive-scroll").then((LocomotiveScroll) => {
+			if (!scrollRef.current) return
+			scroll = new LocomotiveScroll.default({
+				el: scrollRef.current,
+				smooth: true,
+				lerp: 0.08,
+			})
 		})
 		return () => {
-			scroll.destroy()
+			if (scroll) scroll.destroy()
 		}
 	}, [])
 
