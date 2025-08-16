@@ -41,7 +41,6 @@ export default function HomePage() {
 
       <Navigation />
 
-      {/* Hero Section */}
       <section className="relative py-20 px-4 overflow-hidden">
         {/* Blurred background image, content stays sharp */}
         <div
