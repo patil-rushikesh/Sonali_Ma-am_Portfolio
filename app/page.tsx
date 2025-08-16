@@ -1,11 +1,13 @@
 "use client";
 
 import { Navigation } from "@/components/navigation";
+import SpotlightStrip from "@/components/stripe";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { ScrollReveal } from "@/components/scroll-reveal";
+import { motion, useAnimation } from "framer-motion";
+import LocomotiveScroll from "locomotive-scroll";
 import Link from "next/link";
 import { useRef, useEffect } from "react";
+// import SpotlightSection from "@/components/spotlight";
 export default function HomePage() {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -20,6 +22,12 @@ export default function HomePage() {
             el: scrollRef.current,
             smooth: true,
             lerp: 0.08,
+          });
+          // Scroll capture event
+          scroll.on("scroll", (obj: any) => {
+            // You can log or use obj.scroll.y (vertical) or obj.scroll.x (horizontal)
+            // For demo, log scroll position:
+            // console.log("Scroll position:", obj.scroll.y);
           });
         } catch (err) {
           // eslint-disable-next-line no-console
@@ -42,7 +50,6 @@ export default function HomePage() {
       className="min-h-screen relative overflow-hidden"
       data-scroll-container
     >
-
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-black/5 to-transparent rounded-full animate-float"></div>
         <div className="absolute top-40 right-20 w-24 h-24 bg-gradient-to-br from-black/3 to-transparent rounded-full animate-float animate-delay-200"></div>
@@ -112,87 +119,10 @@ export default function HomePage() {
       </section>
 
       {/* Quick Navigation Cards */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto max-w-6xl">
-          <ScrollReveal>
-            <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12 gradient-text">
-              Explore My Work
-            </h2>
-          </ScrollReveal>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                title: "Talks Delivered",
-                description:
-                  "Presentations and speaking engagements across various topics and conferences.",
-                href: "/talks",
-                icon: "🎤",
-              },
-              {
-                title: "IPR Portfolio",
-                description:
-                  "Intellectual property rights, patents, and innovative solutions developed.",
-                href: "/ipr",
-                icon: "⚖️",
-              },
-              {
-                title: "Learning Resources",
-                description:
-                  "Curated educational materials, courses, and knowledge-sharing content.",
-                href: "/resources",
-                icon: "📚",
-              },
-              {
-                title: "Gallery",
-                description:
-                  "Visual showcase of projects, achievements, and creative endeavors.",
-                href: "/gallery",
-                icon: "🖼️",
-              },
-              {
-                title: "About Me",
-                description:
-                  "Personal background, expertise, and professional journey overview.",
-                href: "/about",
-                icon: "👤",
-              },
-              {
-                title: "Contact",
-                description:
-                  "Get in touch for collaborations, inquiries, or professional connections.",
-                href: "/contact",
-                icon: "📧",
-              },
-            ].map((item, index) => (
-              <ScrollReveal key={item.href} delay={index * 100}>
-                <Card className="group hover-lift hover-glow transition-all duration-500 animate-scale-in border-0 shadow-lg">
-                  <CardContent className="p-6 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-shimmer"></div>
-                    <div className="relative z-10">
-                      <div className="text-3xl mb-4 animate-bounce-subtle group-hover:animate-float">
-                        {item.icon}
-                      </div>
-                      <h3 className="font-serif text-xl font-semibold mb-3 group-hover:text-primary transition-colors duration-300">
-                        {item.title}
-                      </h3>
-                      <p className="text-muted-foreground mb-4 leading-relaxed">
-                        {item.description}
-                      </p>
-                      <Button
-                        asChild
-                        variant="outline"
-                        className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 bg-transparent btn-premium hover-scale"
-                      >
-                        <Link href={item.href}>Explore</Link>
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
+      <section className=" bg-muted/30 overflow-hidden">
+            <SpotlightStrip/>
       </section>
+      <section className="min-h-screen w-screen "></section>
     </div>
   );
 }
