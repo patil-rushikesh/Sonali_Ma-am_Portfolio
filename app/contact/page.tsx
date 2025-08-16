@@ -139,10 +139,8 @@ export default function ContactPage() {
               </Card>
             </div>
 
-            {/* Contact Information */}
             <div className="animate-fade-in-up" style={{ animationDelay: "200ms" }}>
               <div className="space-y-8">
-                {/* Contact Details */}
                 <Card>
                   <CardHeader>
                     <h3 className="font-serif text-xl font-semibold mb-2">Get in Touch</h3>
@@ -173,37 +171,19 @@ export default function ContactPage() {
                   </CardContent>
                 </Card>
 
-                {/* Response Time */}
-                <Card>
-                  <CardContent className="p-6">
-                    <div className="flex items-center gap-3 mb-3">
-                      <Clock className="w-5 h-5 text-primary" />
-                      <h4 className="font-serif text-lg font-semibold">Response Time</h4>
-                    </div>
-                    <p className="text-muted-foreground leading-relaxed">
-                      I typically respond to inquiries within 24-48 hours during business days. For urgent matters,
-                      please indicate the priority in your subject line.
-                    </p>
-                  </CardContent>
-                </Card>
-
-                {/* Inquiry Types */}
-                <Card>
-                  <CardContent className="p-6">
-                    <div className="flex items-center gap-3 mb-4">
-                      <MessageSquare className="w-5 h-5 text-primary" />
-                      <h4 className="font-serif text-lg font-semibold">What I Can Help With</h4>
-                    </div>
-                    <ul className="space-y-2 text-muted-foreground">
-                      <li>• Speaking engagements and keynote presentations</li>
-                      <li>• Consulting on innovation and digital transformation</li>
-                      <li>• Collaboration on research projects</li>
-                      <li>• Intellectual property development partnerships</li>
-                      <li>• Educational content creation and workshops</li>
-                      <li>• Media interviews and thought leadership</li>
-                    </ul>
-                  </CardContent>
-                </Card>
+                {/* Embedded Google Map */}
+                <div className="rounded-lg overflow-hidden shadow">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3780.273282914894!2d73.75906487507767!3d18.65172878246744!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2b9e76c8fa205%3A0x1b210131915734fd!2sPCCOE%20-%20Pimpri%20Chinchwad%20College%20Of%20Engineering!5e0!3m2!1sen!2sin!4v1755375230996!5m2!1sen!2sin"
+                    width="100%"
+                    height="300"
+                    style={{ border: 0 }}
+                    allowFullScreen={true}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  ></iframe>
+                </div>
+                
               </div>
             </div>
           </div>
