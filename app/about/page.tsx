@@ -277,7 +277,7 @@ const About = () => {
         </div>
       </section>
 
-      <section className="py-16 px-4" ref={philosophyRef}>
+        <section className="py-16 px-4" ref={philosophyRef}>
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="font-serif text-3xl md:text-4xl font-bold mb-8">
             My Philosophy

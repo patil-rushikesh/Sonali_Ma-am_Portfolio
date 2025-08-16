@@ -12,7 +12,6 @@ const navigationItems = [
   { name: "About Me", href: "/about" },
   { name: "Talks Delivered", href: "/talks" },
   { name: "IPR", href: "/ipr" },
-  { name: "Learning Resources", href: "/resources" },
   { name: "Gallery", href: "/gallery" },
   { name: "Contact", href: "/contact" },
 ]
