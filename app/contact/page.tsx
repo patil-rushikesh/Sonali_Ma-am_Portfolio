@@ -226,7 +226,12 @@ export default function ContactPage() {
                 </Card>
 
                 {/* Embedded Google Map */}
-                <div className="rounded-lg overflow-hidden shadow">
+                <div className="rounded-lg overflow-hidden shadow relative min-h-[300px]">
+                  {loading && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-background/70 z-10">
+                      <Loader />
+                    </div>
+                  )}
                   <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3780.273282914894!2d73.75906487507767!3d18.65172878246744!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2b9e76c8fa205%3A0x1b210131915734fd!2sPCCOE%20-%20Pimpri%20Chinchwad%20College%20Of%20Engineering!5e0!3m2!1sen!2sin!4v1755375230996!5m2!1sen!2sin"
                     width="100%"
@@ -235,6 +240,7 @@ export default function ContactPage() {
                     allowFullScreen={true}
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
+                    onLoad={() => setLoading(false)}
                   ></iframe>
                 </div>
 
