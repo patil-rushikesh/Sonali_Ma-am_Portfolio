@@ -28,7 +28,7 @@ export function Navigation() {
           {/* Logo/Brand */}
           <Link href="/" className="flex items-center space-x-2 group">
             <span className="font-serif text-xl font-bold text-foreground gradient-text group-hover:animate-shimmer transition-all duration-300">
-              Portfolio
+              Dr. Sonali Patil
             </span>
           </Link>
 
@@ -88,7 +88,7 @@ export function Navigation() {
           >
             <div className="flex flex-col h-full">
               <div className="flex items-center justify-between px-4 py-4 border-b">
-                <span className="font-serif text-xl font-bold text-foreground">Portfolio</span>
+                <span className="font-serif text-xl font-bold text-foreground">Dr. Sonali Patil</span>
                 <Button
                   variant="ghost"
                   size="icon"
