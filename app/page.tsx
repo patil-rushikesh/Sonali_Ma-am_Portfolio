@@ -3,11 +3,8 @@
 import { Navigation } from "@/components/navigation";
 import SpotlightStrip from "@/components/stripe";
 import { Button } from "@/components/ui/button";
-import { motion, useAnimation } from "framer-motion";
-import LocomotiveScroll from "locomotive-scroll";
 import Link from "next/link";
 import { useRef, useEffect } from "react";
-// import SpotlightSection from "@/components/spotlight";
 export default function HomePage() {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {

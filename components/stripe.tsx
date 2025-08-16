@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import LocomotiveScroll from "locomotive-scroll";
 
 export default function Stripe() {
   const stripRef = useRef<HTMLDivElement>(null);
@@ -10,45 +8,51 @@ export default function Stripe() {
   const [direction, setDirection] = useState<"right" | "left">("right");
 
   useEffect(() => {
-    if (!stripRef.current) return;
-
-    // Duplicate content for seamless loop
-    const content = stripRef.current.innerHTML;
-    stripRef.current.innerHTML = content + content;
-
-    // Create infinite tween
-    tweenRef.current = gsap.to(stripRef.current, {
-      xPercent: -50, // move half the width since content is duplicated
-      ease: "none",
-      duration: 10,
-      repeat: -1,
-    });
-
-    // Setup locomotive scroll
-    const scroll = new LocomotiveScroll({
-      el: document.querySelector("[data-scroll-container]") as HTMLElement,
-      smooth: true,
-    });
-
+    let scroll: any = null;
+    let gsapInstance: any = null;
+    let tween: any = null;
     let lastY = 0;
-
-    scroll.on("scroll", (obj: any) => {
-      const currentY = obj.scroll.y;
-      if (currentY > lastY) {
-        // scrolling down → forward
-        tweenRef.current?.play();
-        setDirection("right");
-      } else if (currentY < lastY) {
-        // scrolling up → reverse
-        tweenRef.current?.reverse();
-        setDirection("left");
-      }
-      lastY = currentY;
-    });
-
+    let mounted = true;
+    (async () => {
+      if (!stripRef.current) return;
+      const [{ default: gsap }, { default: LocomotiveScroll }] = await Promise.all([
+        import("gsap"),
+        import("locomotive-scroll")
+      ]);
+      if (!mounted) return;
+      // Duplicate content for seamless loop
+      const content = stripRef.current.innerHTML;
+      stripRef.current.innerHTML = content + content;
+      // Create infinite tween
+      tween = gsap.to(stripRef.current, {
+        xPercent: -50, // move half the width since content is duplicated
+        ease: "none",
+        duration: 10,
+        repeat: -1,
+      });
+      // Setup locomotive scroll
+      scroll = new LocomotiveScroll({
+        el: document.querySelector("[data-scroll-container]") as HTMLElement,
+        smooth: true,
+      });
+      scroll.on("scroll", (obj: any) => {
+        const currentY = obj.scroll.y;
+        if (currentY > lastY) {
+          // scrolling down → forward
+          tween?.play();
+          setDirection("right");
+        } else if (currentY < lastY) {
+          // scrolling up → reverse
+          tween?.reverse();
+          setDirection("left");
+        }
+        lastY = currentY;
+      });
+    })();
     return () => {
-      scroll.destroy();
-      tweenRef.current?.kill();
+      mounted = false;
+      if (scroll) scroll.destroy();
+      if (tween) tween.kill();
     };
   }, []);
 
