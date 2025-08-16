@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <footer className="bg-background border-t border-border">
       <div className="container mx-auto max-w-6xl px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16">
           {/* About Section */}
           <div className="lg:col-span-2">
             <h3 className="font-serif text-2xl font-bold mb-4">
@@ -69,7 +69,7 @@ const Footer = () => {
           {/* Quick Links */}
           <div>
             <h4 className="font-semibold text-lg mb-4">Quick Links</h4>
-            <ul className="space-y-2">
+            <ul className="space-y-3">
               <li>
                 <Link
                   href="/about"
