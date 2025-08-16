@@ -14,7 +14,6 @@ const About = () => {
   const bioSectionRef = useRef<HTMLDivElement | null>(null);
   const imageRef = useRef<HTMLDivElement | null>(null);
   const timelineRef = useRef<HTMLDivElement | null>(null);
-  const philosophyRef = useRef<HTMLDivElement | null>(null);
   const [experience, setExperience] = useState<any[] | null>(null);
 
   useEffect(() => {
@@ -93,21 +92,6 @@ const About = () => {
             trigger: imageRef.current,
             scroller: scrollRef.current,
             start: "top 85%",
-          },
-        });
-      }
-
-      // Philosophy Section Animation
-      if (philosophyRef.current) {
-        gsap.from(philosophyRef.current, {
-          y: 50,
-          opacity: 0,
-          duration: 1,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: philosophyRef.current,
-            scroller: scrollRef.current,
-            start: "top 80%",
           },
         });
       }

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import axios from "axios";
 import Link from "next/link";
+import { Award, Shield, Lightbulb } from "lucide-react"
 import { useRef, useEffect, useState } from "react";
 import Footer from "@/components/footer";
 interface Testimonial {
@@ -45,7 +46,7 @@ export default function HomePage() {
             lerp: 0.08,
           });
           // Scroll capture event
-          scroll.on("scroll", (obj: any) => {});
+          scroll.on("scroll", (obj: any) => { });
         } catch (err) {
           // eslint-disable-next-line no-console
           console.error("Locomotive Scroll failed to load:", err);
@@ -142,75 +143,43 @@ export default function HomePage() {
       <section className="bg-muted/30 overflow-hidden">
         <SpotlightStrip />
       </section>
-
-      {/* Highlight Section with 3 boxes */}
-      <section className="py-20 px-4 flex justify-center items-center min-h-[60vh] bg-background">
-        <div
-          id="highlight-cards"
-          className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-3 gap-8"
-        >
-          {/* Box 1 */}
-          <div className="relative">
-            <div className="absolute -top-8 left-1/2 -translate-x-1/2 z-10">
-              <span className="inline-block px-4 py-1 rounded-full bg-primary text-primary-foreground font-semibold shadow-lg text-lg">
-                Talks
-              </span>
-            </div>
-            <div className="rounded-2xl shadow-2xl bg-white dark:bg-zinc-900 border border-border p-8 flex flex-col items-center gap-6">
-              <h2 className="font-serif text-2xl font-bold text-center mb-2">
-                Inspiring Talks
-              </h2>
-              <p className="text-muted-foreground text-center">
-                Explore a collection of impactful talks delivered at national
-                and international conferences, inspiring audiences across the
-                globe.
-              </p>
-              <Button asChild className="mt-4 w-full">
-                <Link href="/talks">View Talks</Link>
-              </Button>
-            </div>
-          </div>
-          {/* Box 2 */}
-          <div className="relative">
-            <div className="absolute -top-8 left-1/2 -translate-x-1/2 z-10">
-              <span className="inline-block px-4 py-1 rounded-full bg-primary text-primary-foreground font-semibold shadow-lg text-lg">
-                IPR
-              </span>
-            </div>
-            <div className="rounded-2xl shadow-2xl bg-white dark:bg-zinc-900 border border-border p-8 flex flex-col items-center gap-6">
-              <h2 className="font-serif text-2xl font-bold text-center mb-2">
-                Intellectual Property
-              </h2>
-              <p className="text-muted-foreground text-center">
-                Discover patents, copyrights, and innovative solutions that
-                contribute to the advancement of technology and society.
-              </p>
-              <Button asChild className="mt-4 w-full">
-                <Link href="/ipr">View IPR Portfolio</Link>
-              </Button>
-            </div>
-          </div>
-          {/* Box 3 */}
-          <div className="relative">
-            <div className="absolute -top-8 left-1/2 -translate-x-1/2 z-10">
-              <span className="inline-block px-4 py-1 rounded-full bg-primary text-primary-foreground font-semibold shadow-lg text-lg">
-                Resources
-              </span>
-            </div>
-            <div className="rounded-2xl shadow-2xl bg-white dark:bg-zinc-900 border border-border p-8 flex flex-col items-center gap-6">
-              <h2 className="font-serif text-2xl font-bold text-center mb-2">
-                Learning Resources
-              </h2>
-              <p className="text-muted-foreground text-center">
-                Access comprehensive educational materials including research
-                papers, course materials, blockchain tutorials, AI/ML resources,
-                and curated content for continuous learning and professional
-                development in emerging technologies.
-              </p>
-              <Button asChild className="mt-4 w-full">
-                <Link href="/resources">Explore Resources</Link>
-              </Button>
-            </div>
+      {/* IPR Importance Section */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto max-w-4xl">
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12">Why IPR Matters</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Innovation Protection",
+                description:
+                  "Safeguards creative works and inventions from unauthorized use, ensuring inventors can benefit from their innovations.",
+                icon: <Shield className="w-6 h-6" />,
+              },
+              {
+                title: "Economic Value",
+                description:
+                  "Creates tangible business assets that can be licensed, sold, or used as collateral for financing.",
+                icon: <Award className="w-6 h-6" />,
+              },
+              {
+                title: "Competitive Advantage",
+                description:
+                  "Provides market exclusivity and prevents competitors from copying successful innovations.",
+                icon: <Lightbulb className="w-6 h-6" />,
+              },
+            ].map((item, index) => (
+              <Card
+                key={index}
+                className="text-center animate-fade-in-up"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <CardContent className="p-6">
+                  <div className="flex justify-center mb-4 text-primary">{item.icon}</div>
+                  <h3 className="font-serif text-xl font-semibold mb-3">{item.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{item.description}</p>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>

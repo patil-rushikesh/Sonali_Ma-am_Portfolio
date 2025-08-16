@@ -28,16 +28,6 @@ interface Talk {
   updatedAt: string;
 }
 
-const categories = [
-  "All",
-  "Technology",
-  "Leadership",
-  "Education",
-  "Analytics",
-  "Sustainability",
-  "Strategy",
-];
-
 export default function TalksPage() {
   const [talks, setTalks] = useState<Talk[]>([]);
   const [selectedTalk, setSelectedTalk] = useState<Talk | null>(null);
@@ -81,25 +71,8 @@ export default function TalksPage() {
         </div>
       </section>
 
-      {/* Category Filter */}
-      <section className="py-8 px-4 bg-muted/30">
-        <div className="container mx-auto max-w-6xl">
-          <div className="flex flex-wrap justify-center gap-2">
-            {categories.map((category) => (
-              <Badge
-                key={category}
-                variant="outline"
-                className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
-              >
-                {category}
-              </Badge>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Talks Grid */}
-      <section className="py-16 px-4">
+      <section className="px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {talks.map((talk, index) => (

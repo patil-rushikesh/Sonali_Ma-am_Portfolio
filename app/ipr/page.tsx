@@ -512,46 +512,7 @@ export default function IPRPage() {
 				</div>
 			</section> */}
 
-			{/* IPR Importance Section */}
-			<section className="py-16 px-4 bg-muted/30">
-				<div className="container mx-auto max-w-4xl">
-					<h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12">Why IPR Matters</h2>
-					<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-						{[
-							{
-								title: "Innovation Protection",
-								description:
-									"Safeguards creative works and inventions from unauthorized use, ensuring inventors can benefit from their innovations.",
-								icon: <Shield className="w-6 h-6" />,
-							},
-							{
-								title: "Economic Value",
-								description:
-									"Creates tangible business assets that can be licensed, sold, or used as collateral for financing.",
-								icon: <Award className="w-6 h-6" />,
-							},
-							{
-								title: "Competitive Advantage",
-								description:
-									"Provides market exclusivity and prevents competitors from copying successful innovations.",
-								icon: <Lightbulb className="w-6 h-6" />,
-							},
-						].map((item, index) => (
-							<Card
-								key={index}
-								className="text-center animate-fade-in-up"
-								style={{ animationDelay: `${index * 100}ms` }}
-							>
-								<CardContent className="p-6">
-									<div className="flex justify-center mb-4 text-primary">{item.icon}</div>
-									<h3 className="font-serif text-xl font-semibold mb-3">{item.title}</h3>
-									<p className="text-muted-foreground leading-relaxed">{item.description}</p>
-								</CardContent>
-							</Card>
-						))}
-					</div>
-				</div>
-			</section>
+
 
 			{/* Process Section */}
 			<section className="py-16 px-4">
