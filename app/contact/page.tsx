@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Mail, Phone, MapPin, Send, Clock, MessageSquare } from "lucide-react"
+<<<<<<< Updated upstream
 import { useState } from "react"
 import Footer from "@/components/footer";
 
@@ -18,6 +19,12 @@ const Loader = () => (
     <span className="inline-block w-10 h-10 rounded-full border-4 border-black border-t-transparent animate-spin"></span>
   </div>
 );
+=======
+import { useState, useRef, useEffect } from "react"
+// @ts-ignore
+import LocomotiveScroll from "locomotive-scroll"
+import "locomotive-scroll/dist/locomotive-scroll.css"
+>>>>>>> Stashed changes
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -26,20 +33,55 @@ export default function ContactPage() {
     subject: "",
     message: "",
   })
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!scrollRef.current) return
+    const scroll = new LocomotiveScroll({
+      el: scrollRef.current,
+      smooth: true,
+      lerp: 0.08,
+    })
+    return () => {
+      scroll.destroy()
+    }
+  }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission here
-    console.log("Form submitted:", formData)
+    setLoading(true)
+    setSuccess(null)
+    setError(null)
+    try {
+      const res = await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      })
+      if (res.ok) {
+        setSuccess("Your message has been sent successfully!")
+        setFormData({ name: "", email: "", subject: "", message: "" })
+      } else {
+        const data = await res.json()
+        setError(data.error || "Failed to send message. Please try again.")
+      }
+    } catch (err) {
+      setError("Failed to send message. Please try again.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
-    <div className="min-h-screen">
+    <div ref={scrollRef} data-scroll-container className="min-h-screen">
       <Navigation />
 
       {/* Hero Section */}
@@ -121,10 +163,17 @@ export default function ContactPage() {
                       />
                     </div>
 
+                    {success && (
+                      <div className="text-green-600 text-sm">{success}</div>
+                    )}
+                    {error && (
+                      <div className="text-red-600 text-sm">{error}</div>
+                    )}
+
                     <div className="flex gap-4">
-                      <Button type="submit" className="flex-1">
+                      <Button type="submit" className="flex-1" disabled={loading}>
                         <Send className="w-4 h-4 mr-2" />
-                        Send Message
+                        {loading ? "Sending..." : "Send Message"}
                       </Button>
                       <Button
                         type="button"
@@ -138,6 +187,7 @@ export default function ContactPage() {
                           })
                         }
                         className="bg-transparent"
+                        disabled={loading}
                       >
                         Clear
                       </Button>

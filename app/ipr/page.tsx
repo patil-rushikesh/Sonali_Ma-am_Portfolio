@@ -4,8 +4,12 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { FileText, Shield, Lightbulb, Award, Calendar, ExternalLink } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import Footer from '@/components/footer';
+// @ts-ignore
+import LocomotiveScroll from "locomotive-scroll"
+import "locomotive-scroll/dist/locomotive-scroll.css"
+
 const iprTypes = [
 	{
 		icon: <FileText className="w-8 h-8" />,
@@ -112,6 +116,7 @@ const Loader = () => (
 );
 
 export default function IPRPage() {
+	const scrollRef = useRef<HTMLDivElement>(null)
 	const [activeTab, setActiveTab] = useState("publication")
 	const [activeSubTab, setActiveSubTab] = useState({
 		publication: "journal",
@@ -181,6 +186,18 @@ export default function IPRPage() {
 			setResearchGrantData(data.data || []);
 		}
 		ResearchGrants();
+	}, [])
+
+	useEffect(() => {
+		if (!scrollRef.current) return
+		const scroll = new LocomotiveScroll({
+			el: scrollRef.current,
+			smooth: true,
+			lerp: 0.08,
+		})
+		return () => {
+			scroll.destroy()
+		}
 	}, [])
 
 	// Helper to render sub-tabs
@@ -405,7 +422,7 @@ export default function IPRPage() {
 	}
 
 	return (
-		<div className="min-h-screen">
+		<div ref={scrollRef} data-scroll-container className="min-h-screen">
 			<Navigation />
 
 			{/* Hero Section */}

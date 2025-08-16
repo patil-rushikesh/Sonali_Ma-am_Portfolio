@@ -3,7 +3,10 @@
 import { Navigation } from "@/components/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { Fragment, useRef, useEffect, useState } from "react"
-import  Footer  from "@/components/footer";
+import Footer from "@/components/footer"
+// @ts-ignore
+import LocomotiveScroll from "locomotive-scroll"
+import "locomotive-scroll/dist/locomotive-scroll.css"
 
 interface GalleryItem {
   _id: string;
@@ -30,6 +33,7 @@ export default function GalleryPage() {
   const [gallery, setGallery] = useState<GalleryItem[]>([])
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null)
   const modalRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const fetchGalleryItems = async () => {
@@ -42,8 +46,20 @@ export default function GalleryPage() {
     fetchGalleryItems()
   }, [])
 
+  useEffect(() => {
+    if (!scrollRef.current) return
+    const scroll = new LocomotiveScroll({
+      el: scrollRef.current,
+      smooth: true,
+      lerp: 0.08,
+    })
+    return () => {
+      scroll.destroy()
+    }
+  }, [])
+
   return (
-    <div className="min-h-screen">
+    <div ref={scrollRef} data-scroll-container className="min-h-screen">
       <Navigation />
 
       {/* Hero Section */}

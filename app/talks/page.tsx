@@ -11,9 +11,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { CalendarDays, ExternalLink } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import Footer from "@/components/footer";
+// @ts-ignore
+import LocomotiveScroll from "locomotive-scroll";
+import "locomotive-scroll/dist/locomotive-scroll.css";
+
 interface Talk {
   _id: string;
   name: string;
@@ -38,6 +42,19 @@ export default function TalksPage() {
   const [talks, setTalks] = useState<Talk[]>([]);
   const [selectedTalk, setSelectedTalk] = useState<Talk | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!scrollRef.current) return;
+    const scroll = new LocomotiveScroll({
+      el: scrollRef.current,
+      smooth: true,
+      lerp: 0.08,
+    });
+    return () => {
+      scroll.destroy();
+    };
+  }, []);
 
   useEffect(() => {
     const getTalks = async () => {
@@ -60,7 +77,7 @@ export default function TalksPage() {
   }, []);
 
   return (
-    <div className="min-h-screen">
+    <div ref={scrollRef} data-scroll-container className="min-h-screen">
       <Navigation />
 
       {/* Hero Section */}
@@ -226,7 +243,7 @@ export default function TalksPage() {
           </div>
         </div>
       </section>
-      <Footer/>
+      <Footer />
     </div>
   );
 }
