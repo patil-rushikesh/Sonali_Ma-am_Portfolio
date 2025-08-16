@@ -39,7 +39,6 @@ export default function Stripe() {
       scroll.on("scroll", (obj: any) => {
         const currentY = obj.scroll.y;
         if (currentY > lastY) {
-          // scrolling down → always forward
           tween?.play();
           setDirection("right");
           if (reverseTimeout) {

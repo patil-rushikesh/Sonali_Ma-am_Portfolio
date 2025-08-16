@@ -3,9 +3,10 @@ import { Navigation } from "@/components/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import axios from "axios";
 
 const About = () => {
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -13,23 +14,27 @@ const About = () => {
   const imageRef = useRef<HTMLDivElement | null>(null);
   const timelineRef = useRef<HTMLDivElement | null>(null);
   const philosophyRef = useRef<HTMLDivElement | null>(null);
+  const [experience, setExperience] = useState<any[] | null>(null);
 
   useEffect(() => {
     let scroll: any = null;
     let isMounted = true;
+
+    gsap.registerPlugin(ScrollTrigger);
 
     async function initLoco() {
       if (typeof window !== "undefined" && scrollRef.current) {
         try {
           const LocomotiveScroll = (await import("locomotive-scroll")).default;
           if (!isMounted) return;
+
           scroll = new LocomotiveScroll({
             el: scrollRef.current,
             smooth: true,
             lerp: 0.08,
           });
 
-          // Tell ScrollTrigger to use LocomotiveScroll
+          // Locomotive + ScrollTrigger proxy
           scroll.on("scroll", ScrollTrigger.update);
           ScrollTrigger.scrollerProxy(scrollRef.current, {
             scrollTop(value) {
@@ -53,8 +58,6 @@ const About = () => {
       }
     }
 
-    gsap.registerPlugin(ScrollTrigger);
-
     initLoco().then(() => {
       // Bio Section Animation
       if (bioSectionRef.current) {
@@ -71,7 +74,7 @@ const About = () => {
               scroller: scrollRef.current,
               start: "top 80%",
               end: "bottom 60%",
-              scrub: true,
+              scrub: false,
             },
           }
         );
@@ -87,22 +90,6 @@ const About = () => {
           ease: "power3.out",
           scrollTrigger: {
             trigger: imageRef.current,
-            scroller: scrollRef.current,
-            start: "top 85%",
-          },
-        });
-      }
-
-      // Timeline Cards Animation
-      if (timelineRef.current) {
-        gsap.from(timelineRef.current.querySelectorAll(".timeline-card"), {
-          y: 100,
-          opacity: 0,
-          duration: 1,
-          stagger: 0.15,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: timelineRef.current,
             scroller: scrollRef.current,
             start: "top 85%",
           },
@@ -131,9 +118,41 @@ const About = () => {
     return () => {
       isMounted = false;
       if (scroll) scroll.destroy();
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      ScrollTrigger.killAll();
     };
   }, []);
+
+  // Fetch Experience data
+  useEffect(() => {
+    const getExp = async () => {
+      const res = await axios.get("/api/getExperience");
+      setExperience(res.data.data);
+    };
+    getExp();
+  }, []);
+
+  // Animate Experience cards when data is loaded
+  useEffect(() => {
+    if (!timelineRef.current || !experience || !Array.isArray(experience))
+      return;
+
+    const cards = timelineRef.current.querySelectorAll(".timeline-card");
+
+    gsap.from(cards, {
+      y: 80,
+      opacity: 0,
+      scale: 0.95,
+      duration: 1,
+      ease: "power3.out",
+      stagger: 0.25,
+      scrollTrigger: {
+        trigger: timelineRef.current,
+        scroller: scrollRef.current,
+        start: "top 75%",
+        end: "bottom 25%",
+      },
+    });
+  }, [experience]);
 
   return (
     <div
@@ -154,7 +173,7 @@ const About = () => {
                   src="/professional-headshot.png"
                   alt="Professional headshot"
                   fill
-                  className="object-cover rounded-lg shadow-lg"
+                  className=" bg-center rounded-lg shadow-lg"
                   data-scroll
                   data-scroll-speed="10"
                   data-scroll-direction="horizontal"
@@ -169,21 +188,18 @@ const About = () => {
               </h1>
               <div className="space-y-6 text-muted-foreground leading-relaxed">
                 <p className="text-lg">
-                  Welcome to my professional journey. I am a passionate
-                  individual dedicated to sharing knowledge, creating innovative
-                  solutions, and contributing to the advancement of technology
-                  and education.
+                  Dr. Sonali Patil (IEEE Senior Member) is Professor and Head of
+                  the Computer Engineering Department at PCCoE, SPPU, Pune, with
+                  over two decades of academic experience. She holds a B.E. in
+                  Computer Science, M.E. in Computer Engineering, and a Ph.D. in
+                  Computer Engineering.
                 </p>
                 <p>
-                  With years of experience in delivering impactful talks,
-                  developing intellectual property, and curating valuable
-                  learning resources, I strive to make complex concepts
-                  accessible and engaging for diverse audiences.
-                </p>
-                <p>
-                  My work spans across multiple domains, from technical
-                  presentations to educational content creation, always with a
-                  focus on quality, clarity, and practical application.
+                  She has authored 70+ research papers, holds international and
+                  national patents, and has been recognized with the IEEE
+                  Innovator/Researcher of the Year Award (2021) and the Women
+                  Researcher Award (2020). A noted speaker, she continues to
+                  make significant contributions to IT and education.
                 </p>
               </div>
 
@@ -214,70 +230,70 @@ const About = () => {
         </div>
       </section>
 
-      {/* Experience Timeline */}
+      {/* Experience Section */}
       <section className="py-16 px-4 bg-muted/30">
-        <div
-          className="container mx-auto max-w-4xl"
-          ref={timelineRef}
-        >
+        <div className="container mx-auto max-w-4xl" ref={timelineRef}>
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12">
             Professional Journey
           </h2>
           <div className="space-y-8">
-            {[
-              {
-                period: "2020 - Present",
-                title: "Senior Professional",
-                description:
-                  "Leading innovative projects and delivering high-impact presentations to diverse audiences worldwide.",
-              },
-              {
-                period: "2018 - 2020",
-                title: "Subject Matter Expert",
-                description:
-                  "Developed comprehensive learning resources and established thought leadership in key areas of expertise.",
-              },
-              {
-                period: "2015 - 2018",
-                title: "Research & Development",
-                description:
-                  "Focused on intellectual property development and creating solutions that address real-world challenges.",
-              },
-              {
-                period: "2012 - 2015",
-                title: "Early Career",
-                description:
-                  "Built foundational expertise through hands-on experience and continuous learning in various domains.",
-              },
-            ].map((item, index) => (
-              <Card
-                key={index}
-                className="timeline-card hover:shadow-md transition-shadow duration-300"
-              >
-                <CardContent className="p-6">
-                  <div className="flex flex-col md:flex-row md:items-center gap-4">
-                    <div className="md:w-32 flex-shrink-0">
-                      <Badge variant="outline" className="text-sm font-medium">
-                        {item.period}
-                      </Badge>
-                    </div>
-                    <div className="flex-grow">
-                      <h3 className="font-serif text-xl font-semibold mb-2">
-                        {item.title}
-                      </h3>
-                      <p className="text-muted-foreground leading-relaxed">
-                        {item.description}
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+            {!experience && (
+              <div className="text-center text-muted-foreground py-8">
+                Loading experience...
+              </div>
+            )}
+            {experience && experience.length === 0 && (
+              <div className="text-center text-muted-foreground py-8">
+                No experience found.
+              </div>
+            )}
+            {experience &&
+              experience.map((item: any, index) => {
+                const start =
+                  item.startMonth && item.startYear
+                    ? `${String(item.startMonth).padStart(2, "0")}/${item.startYear}`
+                    : "";
+                const end = item.currentlyWorking
+                  ? "Present"
+                  : item.endMonth && item.endYear
+                  ? `${String(item.endMonth).padStart(2, "0")}/${item.endYear}`
+                  : "";
+                const period = start && end ? `${start} - ${end}` : "";
+
+                return (
+                  <Card
+                    key={item._id || index}
+                    className="timeline-card hover:shadow-md transition-shadow duration-300"
+                  >
+                    <CardContent className="p-6">
+                      <div className="flex flex-col md:flex-row md:items-center gap-4">
+                        <div className="md:w-48 flex-shrink-0">
+                          <Badge
+                            variant="outline"
+                            className="text-sm font-medium"
+                          >
+                            {period}
+                          </Badge>
+                        </div>
+                        <div className="flex-grow">
+                          <h3 className="font-serif text-xl font-semibold mb-2">
+                            {item.position}
+                          </h3>
+                          <p className="text-muted-foreground leading-relaxed">
+                            {item.shortDescription || item.description}
+                          </p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
           </div>
         </div>
       </section>
 
-        <section className="py-16 px-4" ref={philosophyRef}>
+      {/* Philosophy Section */}
+      <section className="py-16 px-4" ref={philosophyRef}>
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="font-serif text-3xl md:text-4xl font-bold mb-8">
             My Philosophy
