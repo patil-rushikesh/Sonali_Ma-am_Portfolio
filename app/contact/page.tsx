@@ -25,6 +25,10 @@ import { useState, useRef, useEffect } from "react"
 import LocomotiveScroll from "locomotive-scroll"
 import "locomotive-scroll/dist/locomotive-scroll.css"
 >>>>>>> Stashed changes
+import { useState, useRef, useEffect } from "react"
+// @ts-ignore
+import LocomotiveScroll from "locomotive-scroll"
+import "locomotive-scroll/dist/locomotive-scroll.css"
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -49,6 +53,22 @@ export default function ContactPage() {
       scroll.destroy()
     }
   }, [])
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!scrollRef.current) return
+    const scroll = new LocomotiveScroll({
+      el: scrollRef.current,
+      smooth: true,
+      lerp: 0.08,
+    })
+    return () => {
+      scroll.destroy()
+    }
+  }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -56,7 +76,29 @@ export default function ContactPage() {
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setLoading(true)
+    setSuccess(null)
+    setError(null)
+    try {
+      const res = await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      })
+      if (res.ok) {
+        setSuccess("Your message has been sent successfully!")
+        setFormData({ name: "", email: "", subject: "", message: "" })
+      } else {
+        const data = await res.json()
+        setError(data.error || "Failed to send message. Please try again.")
+      }
+    } catch (err) {
+      setError("Failed to send message. Please try again.")
+    } finally {
+      setLoading(false)
+    }
     setLoading(true)
     setSuccess(null)
     setError(null)
@@ -81,6 +123,7 @@ export default function ContactPage() {
   }
 
   return (
+    <div ref={scrollRef} data-scroll-container className="min-h-screen">
     <div ref={scrollRef} data-scroll-container className="min-h-screen">
       <Navigation />
 
@@ -170,9 +213,18 @@ export default function ContactPage() {
                       <div className="text-red-600 text-sm">{error}</div>
                     )}
 
+                    {success && (
+                      <div className="text-green-600 text-sm">{success}</div>
+                    )}
+                    {error && (
+                      <div className="text-red-600 text-sm">{error}</div>
+                    )}
+
                     <div className="flex gap-4">
                       <Button type="submit" className="flex-1" disabled={loading}>
+                      <Button type="submit" className="flex-1" disabled={loading}>
                         <Send className="w-4 h-4 mr-2" />
+                        {loading ? "Sending..." : "Send Message"}
                         {loading ? "Sending..." : "Send Message"}
                       </Button>
                       <Button
@@ -187,6 +239,7 @@ export default function ContactPage() {
                           })
                         }
                         className="bg-transparent"
+                        disabled={loading}
                         disabled={loading}
                       >
                         Clear
