@@ -4,16 +4,21 @@ import { Navigation } from "@/components/navigation"
 import SpotlightStrip from "@/components/stripe"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import axios from "axios"
 import Link from "next/link"
 import { useRef, useEffect, useState } from "react"
 
 interface Testimonial {
-  id: number
-  name: string
-  role: string
-  organization: string
-  content: string
-  rating: number
+  _id: string;
+  name: string;
+  position: string;
+  paragraph: string;
+  image: {
+    url: string;
+    publicId: string;
+  };
+  createdAt: string;
+  updatedAt: string;
 }
 
 export default function HomePage() {
@@ -21,42 +26,10 @@ export default function HomePage() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([])
 
   const fetchTestimonials = async () => {
-    // TODO: Replace with actual database call when integration is added
-    // Example: const response = await fetch('/api/testimonials');
-    // const data = await response.json();
-    // setTestimonials(data);
-
-    // Mock data for now
-    const mockTestimonials: Testimonial[] = [
-      {
-        id: 1,
-        name: "Dr. Rajesh Kumar",
-        role: "Professor",
-        organization: "IIT Bombay",
-        content:
-          "Dr. Sonali Patil's expertise in blockchain technology and her engaging presentation style make her talks truly inspiring. Her research contributions have significantly advanced our understanding of distributed systems.",
-        rating: 5,
-      },
-      {
-        id: 2,
-        name: "Priya Sharma",
-        role: "Software Engineer",
-        organization: "Microsoft India",
-        content:
-          "Attending Dr. Patil's workshop on emerging technologies was a game-changer for my career. Her practical approach to complex concepts and real-world applications provided invaluable insights.",
-        rating: 5,
-      },
-      {
-        id: 3,
-        name: "Prof. Amit Desai",
-        role: "Head of Department",
-        organization: "Pune University",
-        content:
-          "Dr. Sonali's leadership in the IEEE Pune Blockchain Group has fostered incredible collaboration in our academic community. Her vision for technology education is truly commendable.",
-        rating: 5,
-      },
-    ]
-    setTestimonials(mockTestimonials)
+    
+    const testimonials=await axios.get("/api/testimonials");
+    console.log(testimonials.data)
+    setTestimonials(testimonials.data.data);
   }
 
   useEffect(() => {
@@ -224,24 +197,28 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {testimonials.map((testimonial) => (
+            {testimonials &&  testimonials.map((testimonial) => (
               <Card
-                key={testimonial.id}
+                key={testimonial._id}
                 className="bg-white dark:bg-zinc-900 shadow-lg hover:shadow-xl transition-shadow duration-300"
               >
                 <CardContent className="p-6">
-                  <div className="flex mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <svg key={i} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                      </svg>
-                    ))}
+                  <div className="flex mb-4 items-center gap-4">
+                    {testimonial.image?.url && (
+                      <img
+                        src={testimonial.image.url}
+                        alt={testimonial.name}
+                        className="w-12 h-12 rounded-full object-cover border"
+                      />
+                    )}
+                    <div>
+                      <p className="font-semibold text-foreground">{testimonial.name}</p>
+                      <p className="text-sm text-muted-foreground">{testimonial.position}</p>
+                    </div>
                   </div>
-                  <p className="text-muted-foreground mb-6 leading-relaxed">"{testimonial.content}"</p>
-                  <div className="border-t pt-4">
-                    <p className="font-semibold text-foreground">{testimonial.name}</p>
-                    <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                    <p className="text-sm text-muted-foreground">{testimonial.organization}</p>
+                  <p className="text-muted-foreground mb-6 leading-relaxed">"{testimonial.paragraph}"</p>
+                  <div className="border-t pt-4 text-xs text-muted-foreground">
+                    Added: {new Date(testimonial.createdAt).toLocaleDateString()}
                   </div>
                 </CardContent>
               </Card>
