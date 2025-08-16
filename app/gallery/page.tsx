@@ -4,6 +4,13 @@ import { Navigation } from "@/components/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { Fragment, useRef, useEffect, useState } from "react"
 import Footer from "@/components/footer"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog"
 
 interface GalleryItem {
   _id: string;
@@ -125,49 +132,37 @@ export default function GalleryPage() {
       </section>
 
       {/* Modal for Image Card */}
-      {selectedItem && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
-          onClick={() => setSelectedItem(null)}
-        >
-          <div
-            ref={modalRef}
-            className="bg-background rounded-3xl shadow-xl max-w-lg w-full p-6 relative animate-modal-fade-in"
-            onClick={e => e.stopPropagation()}
-          >
-            {/* <button
-              className="absolute top-3 right-3 text-4xl text-muted-foreground hover:text-foreground transition"
-              onClick={() => setSelectedItem(null)}
-              aria-label="Close"
-            >
-              &times;
-            </button> */}
-            <img
-              src={selectedItem.image?.url || "/placeholder.svg"}
-              alt={selectedItem.title}
-              className="w-full h-80 object-cover rounded mb-4"
-            />
-            <div>
-              <h3 className="font-serif text-2xl font-bold mb-2">{selectedItem.title}</h3>
-              <span className="inline-block bg-muted px-2 py-1 rounded text-xs font-medium mb-2">{selectedItem.location}</span>
-              <p className="text-muted-foreground mb-3">{selectedItem.shortDescription}</p>
-              <div className="text-xs text-muted-foreground">
-                Created: {new Date(selectedItem.createdAt).toLocaleDateString()}
+      <Dialog open={!!selectedItem} onOpenChange={open => !open && setSelectedItem(null)}>
+        <DialogContent className="max-w-lg">
+          {selectedItem && (
+            <>
+              <DialogHeader>
+                <DialogTitle>{selectedItem.title}</DialogTitle>
+                <DialogDescription>
+                  <div className="flex flex-col items-center gap-4 mt-2">
+                    <img
+                      src={selectedItem.image?.url || "/placeholder.svg"}
+                      alt={selectedItem.title}
+                      className="rounded-lg object-cover border w-full h-80"
+                    />
+                    <div className="text-sm text-muted-foreground text-center">
+                      {selectedItem.location}
+                    </div>
+                  </div>
+                </DialogDescription>
+              </DialogHeader>
+              <div>
+                <p className="text-base leading-relaxed whitespace-pre-line">
+                  {selectedItem.shortDescription}
+                </p>
+                <div className="mt-4 text-xs text-muted-foreground text-center">
+                  Created: {new Date(selectedItem.createdAt).toLocaleDateString()}
+                </div>
               </div>
-            </div>
-          </div>
-          {/* Animation styles */}
-          <style jsx global>{`
-            .animate-modal-fade-in {
-              animation: modal-fade-in 0.3s cubic-bezier(0.4,0,0.2,1);
-            }
-            @keyframes modal-fade-in {
-              0% { opacity: 0; transform: scale(0.95);}
-              100% { opacity: 1; transform: scale(1);}
-            }
-          `}</style>
-        </div>
-      )}
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* Gallery Statistics */}
       <section className="py-16 px-4 bg-muted/30">
