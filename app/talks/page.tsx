@@ -118,7 +118,7 @@ export default function TalksPage() {
                     alt={talk.name}
                     width={300}
                     height={200}
-                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full object-cover bg-center group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
                 <CardHeader className="pb-3">
