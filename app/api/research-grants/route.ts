@@ -1,9 +1,10 @@
 import { getDatabase } from "@/lib/db";
-import {NextResponse,NextRequest} from "next/server";
-export async function GET(req: NextRequest, res: NextResponse) {
+import { NextRequest, NextResponse } from "next/server";
+
+export async function GET(req:NextRequest, res: NextResponse) {
     try {
         const db = await getDatabase();
-        const gallery = await db.collection("startups").find({}).toArray();
+        const gallery = await db.collection("researchGrants").find({}).toArray();
         return NextResponse.json({ success: true, data: gallery });
     } catch (error) {
         return NextResponse.json({

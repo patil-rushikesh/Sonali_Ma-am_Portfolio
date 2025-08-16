@@ -52,34 +52,56 @@ const patentsSubTabs = [
 ]
 
 interface Publication {
-  _id: string;
-  name: string;
-  description: string;
-  link: string;
-  createdAt: string;
-  updatedAt: string;
-  type: "journal" | "book";
+	_id: string;
+	name: string;
+	description: string;
+	link: string;
+	createdAt: string;
+	updatedAt: string;
+	type: "journal" | "book";
 }
 
 interface Patent {
-  _id: string;
-  type: "International" | "National";
-  title: string;
-  date: string;
-  status: string;
-  number: string;
-  createdAt: string;
-  updatedAt: string;
+	_id: string;
+	type: "International" | "National";
+	title: string;
+	date: string;
+	status: string;
+	number: string;
+	createdAt: string;
+	updatedAt: string;
 }
 
 interface Copyright {
-  _id: string;
-  title: string;
-  diaryNumber: string;
-  copyrightRegOf: string;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
+	_id: string;
+	title: string;
+	diaryNumber: string;
+	copyrightRegOf: string;
+	status: string;
+	createdAt: string;
+	updatedAt: string;
+}
+
+interface Startup {
+	_id: string;
+	name: string;
+	description: string;
+	status?: string;
+	image?: { url: string }; // Add image property (optional)
+	createdAt: string;
+	updatedAt: string;
+}
+
+interface ResearchGrant {
+	_id: string;
+	fundReceived: number;
+	title: string;
+	grantAgency: string;
+	currency: string;
+	startYear: number;
+	endYear: number;
+	createdAt: string;
+	updatedAt: string;
 }
 
 export default function IPRPage() {
@@ -89,50 +111,70 @@ export default function IPRPage() {
 		patents: "international",
 	})
 
-  const [publicationData, setPublications] = useState<Publication[]>([])
-  const [patentData, setPatentData] = useState<Patent[]>([])
-  const [copyrightData, setCopyrightData] = useState<Copyright[]>([])
+	const [publicationData, setPublications] = useState<Publication[]>([])
+	const [patentData, setPatentData] = useState<Patent[]>([])
+	const [copyrightData, setCopyrightData] = useState<Copyright[]>([])
+	const [startupData, setStartupData] = useState<Startup[]>([])
+	const [researchGrantData, setResearchGrantData] = useState<ResearchGrant[]>([])
 
-  useEffect(() => {
-    const getPublicationData = async () => {
-      // Fetch publication data from an API or database
-      const response = await fetch("/api/publications")
-      const data = await response.json()
-      // Ensure each publication has a 'type' property
-      setPublications(
-        (data.data || []).map((pub: any) => ({
-          ...pub,
-          type: pub.type || "journal", // fallback to "journal" if type missing
-        }))
-      );
-    }
+	useEffect(() => {
+		const getPublicationData = async () => {
+			// Fetch publication data from an API or database
+			const response = await fetch("/api/publications")
+			const data = await response.json()
+			// Ensure each publication has a 'type' property
+			setPublications(
+				(data.data || []).map((pub: any) => ({
+					...pub,
+					type: pub.type || "journal", // fallback to "journal" if type missing
+				}))
+			);
+		}
 
-    getPublicationData()
-  },[])
+		getPublicationData()
+	}, [])
 
-  useEffect(() => {
-    const getPatentsData = async () => {
-      const response = await fetch("/api/patents")
-      const data = await response.json()
-      // Ensure each patent has a 'type' property (International/National)
-      setPatentData(
-        (data.data || []).map((pat: any) => ({
-          ...pat,
-          type: pat.type === "International" ? "International" : "National"
-        }))
-      )
-    }
-    getPatentsData()
-  },[])
+	useEffect(() => {
+		const getPatentsData = async () => {
+			const response = await fetch("/api/patents")
+			const data = await response.json()
+			// Ensure each patent has a 'type' property (International/National)
+			setPatentData(
+				(data.data || []).map((pat: any) => ({
+					...pat,
+					type: pat.type === "International" ? "International" : "National"
+				}))
+			)
+		}
+		getPatentsData()
+	}, [])
 
-  useEffect(() => {
-    const getCopyrightsData=async()=>{
-      const response = await fetch("/api/copyrights")
-      const data = await response.json()
-      setCopyrightData(data.data || []);
-    }
-    getCopyrightsData();
-  },[])
+	useEffect(() => {
+		const getTradeSecretsData = async () => {
+			const response = await fetch("/api/startup")
+			const data = await response.json()
+			setStartupData(data.data || []);
+		}
+		getTradeSecretsData()
+	}, [])
+
+	useEffect(() => {
+		const getCopyrightsData = async () => {
+			const response = await fetch("/api/copyrights")
+			const data = await response.json()
+			setCopyrightData(data.data || []);
+		}
+		getCopyrightsData();
+	}, [])
+
+	useEffect(() => {
+		const ResearchGrants = async () => {
+			const response = await fetch("/api/research-grants")
+			const data = await response.json()
+			setResearchGrantData(data.data || []);
+		}
+		ResearchGrants();
+	}, [])
 
 	// Helper to render sub-tabs
 	function renderSubTabs() {
@@ -279,16 +321,72 @@ export default function IPRPage() {
 		}
 		if (activeTab === "startups") {
 			return (
-				<Card className="mb-4">
-					<CardContent className="p-6 text-center">Startups content goes here.</CardContent>
-				</Card>
+				<div>
+					{startupData.length === 0 && (
+						<Card className="mb-4">
+							<CardContent className="p-6 text-center">
+								No Startups found.
+							</CardContent>
+						</Card>
+					)}
+					{startupData.map((startup) => (
+						<div key={startup._id} className="mb-4">
+							<Card className="flex flex-col md:flex-row items-center gap-6 p-4">
+								{startup.image?.url && (
+									<div className="w-full md:w-48 flex-shrink-0">
+										<img
+											src={startup.image.url}
+											alt={startup.name}
+											className="rounded-lg object-cover "
+										/>
+									</div>
+								)}
+								<CardContent className="flex-1 p-0">
+									<h3 className="font-serif text-xl font-semibold mb-2">{startup.name}</h3>
+									<p className="text-muted-foreground mb-2">{startup.description}</p>
+									{startup.status && (
+										<div className="mb-2">
+											<Badge variant="outline">{startup.status}</Badge>
+										</div>
+									)}
+									<div className="text-xs text-muted-foreground mb-2">
+										Created: {new Date(startup.createdAt).toLocaleDateString()}
+									</div>
+								</CardContent>
+							</Card>
+						</div>
+					))}
+				</div>
 			)
 		}
 		if (activeTab === "research-grant") {
 			return (
-				<Card className="mb-4">
-					<CardContent className="p-6 text-center">Research Grant content goes here.</CardContent>
-				</Card>
+				<div>
+					{researchGrantData.length === 0 && (
+						<Card className="mb-4">
+							<CardContent className="p-6 text-center">
+								No Research Grants found.
+							</CardContent>
+						</Card>
+					)}
+					{researchGrantData.map((grant) => (
+						<Card key={grant._id} className="mb-4">
+							<CardContent className="p-6">
+								<h3 className="font-serif text-xl font-semibold mb-2">{grant.title}</h3>
+								<div className="flex flex-wrap gap-2 mb-2">
+									<Badge variant="outline">{grant.grantAgency}</Badge>
+									<Badge variant="outline">{grant.currency} {grant.fundReceived.toLocaleString()}</Badge>
+								</div>
+								<div className="text-xs text-muted-foreground mb-2">
+									Duration: {grant.startYear} - {grant.endYear}
+								</div>
+								<div className="text-xs text-muted-foreground mb-2">
+									Granted: {new Date(grant.createdAt).toLocaleDateString()}
+								</div>
+							</CardContent>
+						</Card>
+					))}
+				</div>
 			)
 		}
 		return null
