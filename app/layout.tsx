@@ -16,7 +16,7 @@ const dmSans = DM_Sans({
 })
 
 export const metadata: Metadata = {
-  title: "Portfolio - Modern & Minimal",
+  title: "Dr. Sonali Patil",
   description: "A modern and minimal portfolio showcasing talks, IPR, learning resources, and more",
   generator: "v0.app",
 }
