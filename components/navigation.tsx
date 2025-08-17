@@ -14,6 +14,7 @@ const navigationItems = [
   { name: "IPR", href: "/ipr" },
   { name: "Gallery", href: "/gallery" },
   { name: "Contact", href: "/contact" },
+  { name: "Learning Resources", href: "/learning-resources" },
 ]
 
 export function Navigation() {
