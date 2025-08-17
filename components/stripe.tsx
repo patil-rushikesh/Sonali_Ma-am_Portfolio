@@ -46,7 +46,6 @@ export default function Stripe() {
             reverseTimeout = null;
           }
         } else if (currentY < lastY) {
-          // scrolling up → reverse, but only for a short time
           tween?.reverse();
           setDirection("left");
           if (reverseTimeout) clearTimeout(reverseTimeout);
@@ -72,9 +71,9 @@ export default function Stripe() {
         className="flex whitespace-nowrap text-2xl font-bold text-white"
       >
         <span className="px-8">Spotlight</span>
-        <span className="px-8">Infinite Scroll</span>
-        <span className="px-8">Locomotive + GSAP</span>
-        <span className="px-8">Reverse on Scroll</span>
+        <span className="px-8">Spotlight</span>
+        <span className="px-8">Spotlight</span>
+        <span className="px-8">Spotlight</span>
       </div>
     </section>
   );

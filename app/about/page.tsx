@@ -21,6 +21,8 @@ const About = () => {
   const bioSectionRef = useRef<HTMLDivElement | null>(null);
   const imageRef = useRef<HTMLDivElement | null>(null);
   const timelineRef = useRef<HTMLDivElement | null>(null);
+  const qualificationsRef = useRef<HTMLDivElement | null>(null);
+  const contributionsRef = useRef<HTMLDivElement | null>(null);
   const [experience, setExperience] = useState<any[] | null>(null);
 
   useEffect(() => {
@@ -101,6 +103,48 @@ const About = () => {
             start: "top 85%",
           },
         });
+      }
+
+      // Academic Qualifications Animation
+      if (qualificationsRef.current) {
+        gsap.fromTo(
+          qualificationsRef.current,
+          { y: 80, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: qualificationsRef.current,
+              scroller: scrollRef.current,
+              start: "top 85%",
+              end: "bottom 60%",
+              scrub: false,
+            },
+          }
+        );
+      }
+
+      // Other Contributions Animation
+      if (contributionsRef.current) {
+        gsap.fromTo(
+          contributionsRef.current,
+          { y: 80, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: contributionsRef.current,
+              scroller: scrollRef.current,
+              start: "top 85%",
+              end: "bottom 60%",
+              scrub: false,
+            },
+          }
+        );
       }
 
       ScrollTrigger.addEventListener("refresh", () => scroll && scroll.update());
@@ -218,6 +262,95 @@ const About = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-8 px-4">
+        <div className="container mx-auto max-w-4xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {/* Academic Qualifications */}
+            <div ref={qualificationsRef}>
+              <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-8">
+                Academic Qualifications
+              </h2>
+              <div className="space-y-6 text-center">
+                <div>
+                  <h3 className="font-serif text-xl font-semibold mb-1">
+                    Ph.D. in Computer Engineering
+                  </h3>
+                  <div className="text-muted-foreground mb-1">
+                    Amravati University
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    [Year 2011-2015]
+                  </div>
+                </div>
+                <div>
+                  <h3 className="font-serif text-xl font-semibold mb-1">
+                    M.E. in Computer Engineering
+                  </h3>
+                  <div className="text-muted-foreground mb-1">
+                    Pune University
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    [Year 2006-2008]
+                  </div>
+                </div>
+                <div>
+                  <h3 className="font-serif text-xl font-semibold mb-1">
+                    B.E. in Computer Engineering
+                  </h3>
+                  <div className="text-muted-foreground mb-1">
+                    North Maharashtra University
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    [Year 1999-2003]
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* Other Contributions */}
+            <div ref={contributionsRef}>
+              <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-8">
+                Other Contributions
+              </h2>
+              <ul className="space-y-4 text-muted-foreground text-base list-disc list-inside">
+                <li>
+                  BoS Member for IT Department, Sanjivani College of Engineering,
+                  Kopargaon.
+                </li>
+                <li>Evaluator for PhD Thesis.</li>
+                <li>Examiner for ME Dissertation.</li>
+                <li>
+                  Chairman, Paper Setter for theory and practical Examination at
+                  SPPU, Pune.
+                </li>
+                <li>
+                  Coordinator for various STTP, workshops and Seminars.
+                </li>
+                <li>
+                  Expert sessions delivered across many platforms at National and
+                  International Level in Blockchain domain.
+                </li>
+              </ul>
+            </div>
+          </div>
+          {/* Resume Button */}
+          <div className="flex justify-center mt-10">
+            <a
+              href="/Sonali_Profile.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block"
+            >
+              <button
+                className="px-6 py-3 rounded-full bg-primary text-primary-foreground font-semibold shadow hover:bg-primary/90 transition-colors text-lg"
+                type="button"
+              >
+                View Resume
+              </button>
+            </a>
           </div>
         </div>
       </section>

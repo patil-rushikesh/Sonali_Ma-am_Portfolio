@@ -137,7 +137,7 @@ export default function HomePage() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="text-base bg-transparent hover-glow"
+                className="text-white bg-transparent hover-glow"
               >
                 <Link href="/talks">View My Talks</Link>
               </Button>
