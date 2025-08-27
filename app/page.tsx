@@ -12,8 +12,27 @@ import Footer from "@/components/footer";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { setTestimonials, setLoading } from "@/store/testimonialsSlice";
-
-
+import { ElegantCarousel } from "@/components/elegant-carousel";
+const carouselItems = [
+  {
+    id: 1,
+    image: "/sonaliPatilherobg.jpg",
+    headline: "Modern Architecture",
+    description: "Exploring the intersection of form and function in contemporary design",
+  },
+  {
+    id: 2,
+    image: "/sonaliPatilherobg.jpg",
+    headline: "Portrait Studies",
+    description: "Capturing the essence of human emotion through minimalist composition",
+  },
+  {
+    id: 3,
+    image: "/sonaliPatilherobg.jpg",
+    headline: "Abstract Geometry",
+    description: "Finding beauty in the simplicity of geometric forms and patterns",
+  }
+]
 
 // Loader component
 const Loader = () => (
@@ -146,8 +165,13 @@ export default function HomePage() {
       <section className="bg-muted/30 overflow-hidden">
         <SpotlightStrip />
       </section>
+
+      <section className=" px-40 bg-muted/30">
+        <ElegantCarousel items={carouselItems} autoPlay={true} autoPlayInterval={6000} />
+      </section>
+      
       {/* IPR Importance Section */}
-      <section className="py-16 px-4 bg-muted/30">
+      <section className="py-8 px-4 bg-muted/30">
         <div className="container mx-auto max-w-4xl">
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12">Why IPR Matters</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
