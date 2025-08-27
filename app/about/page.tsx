@@ -3,7 +3,7 @@ import { Navigation } from "@/components/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
-import { useRef, useEffect } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Footer from "@/components/footer";
@@ -18,7 +18,7 @@ const Loader = () => (
   </div>
 );
 
-const About = ({ experience }: { experience: any[] }) => {
+const About = ({ experience: propExperience }: { experience: any[] }) => {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const bioSectionRef = useRef<HTMLDivElement | null>(null);
   const imageRef = useRef<HTMLDivElement | null>(null);
@@ -28,6 +28,24 @@ const About = ({ experience }: { experience: any[] }) => {
 
   const dispatch = useDispatch();
   const loading = useSelector((state: RootState) => state.about.loading);
+  const storeExperience = useSelector((state: RootState) => state.about.experience);
+
+  // Fetch experience if not in Redux store
+  useEffect(() => {
+    // if (!storeExperience || storeExperience.length === 0) {
+    const fetchData = async () => {
+      dispatch(setLoading(true));
+      const res = await fetch("/api/getExperience");
+      const data = await res.json();
+      console.log("Fetched experience data:", data);
+      dispatch(setExperience(data.data || []));
+      dispatch(setLoading(false));
+    };
+    fetchData();
+    // }
+  }, []);
+
+  const experience = storeExperience && storeExperience.length > 0 ? storeExperience : propExperience || [];
 
   useEffect(() => {
     let scroll: any = null;
@@ -164,25 +182,37 @@ const About = ({ experience }: { experience: any[] }) => {
 
   // Animate Experience cards when data is loaded
   useEffect(() => {
-    if (!timelineRef.current || !experience || !Array.isArray(experience))
-      return;
+    if (!timelineRef.current || !experience || !Array.isArray(experience)) return;
+
+    // Kill previous animations to avoid stacking
+    gsap.killTweensOf(".timeline-card");
+    gsap.utils.toArray<HTMLElement>(".timeline-card").forEach((card) => {
+      gsap.set(card, { clearProps: "all" });
+    });
 
     const cards = timelineRef.current.querySelectorAll(".timeline-card");
 
-    gsap.from(cards, {
-      y: 80,
-      opacity: 0,
-      scale: 0.95,
-      duration: 1,
-      ease: "power3.out",
-      stagger: 0.25,
-      scrollTrigger: {
-        trigger: timelineRef.current,
-        scroller: scrollRef.current,
-        start: "top 75%",
-        end: "bottom 25%",
-      },
-    });
+    // if (cards.length > 0) {
+    //   gsap.fromTo(
+    //     cards,
+    //     { y: 80, opacity: 0, scale: 0.95 },
+    //     {
+    //       y: 0,
+    //       opacity: 1,
+    //       scale: 1,
+    //       duration: 1,
+    //       ease: "power3.out",
+    //       stagger: 0.25,
+    //       scrollTrigger: {
+    //         trigger: timelineRef.current,
+    //         scroller: scrollRef.current,
+    //         start: "top 100%",
+    //         end: "bottom 100%",
+    //         once: true,
+    //       },
+    //     }
+    //   );
+    // }
   }, [experience]);
 
   return (
@@ -357,14 +387,14 @@ const About = ({ experience }: { experience: any[] }) => {
             Professional Journey
           </h2>
           <div className="space-y-8">
-            {loading && <Loader />}
-            {experience && experience.length === 0 && (
+            {loading ? (
+              <Loader />
+            ) : experience.length === 0 ? (
               <div className="text-center text-muted-foreground py-8">
                 No experience found.
               </div>
-            )}
-            {experience &&
-              experience.map((item: any, index) => {
+            ) : (
+              experience.map((item: any, index: number) => {
                 const start =
                   item.startMonth && item.startYear
                     ? `${String(item.startMonth).padStart(2, "0")}/${item.startYear}`
@@ -384,10 +414,7 @@ const About = ({ experience }: { experience: any[] }) => {
                     <CardContent className="p-6">
                       <div className="flex flex-col md:flex-row md:items-center gap-4">
                         <div className="md:w-48 flex-shrink-0">
-                          <Badge
-                            variant="outline"
-                            className="text-sm font-medium"
-                          >
+                          <Badge variant="outline" className="text-sm font-medium">
                             {period}
                           </Badge>
                         </div>
@@ -403,7 +430,8 @@ const About = ({ experience }: { experience: any[] }) => {
                     </CardContent>
                   </Card>
                 );
-              })}
+              })
+            )}
           </div>
         </div>
       </section>

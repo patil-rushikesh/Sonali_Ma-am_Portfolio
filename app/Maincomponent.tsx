@@ -50,19 +50,19 @@ const DataLoader = ({ children }: { children: ReactNode }) => {
       dispatch(getTestimonials()),
     ]).then(() => {
       const state = store.getState();
-      console.log("Fetched Data:", {
-        publicationData: state.ipr.publicationData,
-        patentData: state.ipr.patentData,
-        copyrightData: state.ipr.copyrightData,
-        startupData: state.ipr.startupData,
-        researchGrantData: state.ipr.researchGrantData,
-        experience: state.about.experience,
-        gallery: state.gallery.items,
-        resources: state.learningResources.items,
-        guides: state.phdGuide.items,
-        talks: state.talks.items,
-        testimonials: state.testimonials.items,
-      });
+      // console.log("Fetched Data:", {
+      //   publicationData: state.ipr.publicationData,
+      //   patentData: state.ipr.patentData,
+      //   copyrightData: state.ipr.copyrightData,
+      //   startupData: state.ipr.startupData,
+      //   researchGrantData: state.ipr.researchGrantData,
+      //   experience: state.about.experience,
+      //   gallery: state.gallery.items,
+      //   resources: state.learningResources.items,
+      //   guides: state.phdGuide.items,
+      //   talks: state.talks.items,
+      //   testimonials: state.testimonials.items,
+      // });
 
       // Animate counter
       gsap.to({ val: 0 }, {
@@ -126,7 +126,6 @@ const DataLoader = ({ children }: { children: ReactNode }) => {
 };
 
 const Maincomponent = ({ children }: { children: ReactNode }) => {
-  const loading = false;
   return (
     <Provider store={store}>
       <DataLoader>{children}</DataLoader>
