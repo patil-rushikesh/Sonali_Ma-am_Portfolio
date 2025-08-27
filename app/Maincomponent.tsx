@@ -5,7 +5,6 @@ import { store } from "@/store";
 import { Navigation } from "@/components/navigation";
 import gsap from "gsap";
 
-// ✅ import thunks
 import {
   getPublicationData,
   getPatentData,
@@ -13,7 +12,6 @@ import {
   getStartupData,
   getResearchGrantData,
 } from "@/store/iprSlice";
-// ✅ import all thunks
 import { getExperience } from "@/store/aboutSlice";
 import { getGallery } from "@/store/gallerySlice";
 import { getResources } from "@/store/learningResourcesSlice";
@@ -30,7 +28,6 @@ const DataLoader = ({ children }: { children: ReactNode }) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    // Animate loading in
     if (loadingRef.current) {
       gsap.fromTo(
         loadingRef.current,
@@ -39,14 +36,12 @@ const DataLoader = ({ children }: { children: ReactNode }) => {
       );
     }
 
-    // Fire off all thunks in parallel
     Promise.all([
       dispatch(getPublicationData()),
       dispatch(getPatentData()),
       dispatch(getCopyrightData()),
       dispatch(getStartupData()),
       dispatch(getResearchGrantData()),
-      // Other thunks
       dispatch(getExperience()),
       dispatch(getGallery()),
       dispatch(getResources()),
