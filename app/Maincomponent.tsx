@@ -121,13 +121,14 @@ const DataLoader = ({ children }: { children: ReactNode }) => {
     );
   }
 
-  return <>{children}</>;
+      
+  return <><Navigation />{children}</>;
 };
 
 const Maincomponent = ({ children }: { children: ReactNode }) => {
+  const loading = false;
   return (
     <Provider store={store}>
-      <Navigation />
       <DataLoader>{children}</DataLoader>
     </Provider>
   );
