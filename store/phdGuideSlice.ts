@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 
 interface PhdGuide {
   _id: string;
@@ -23,6 +23,20 @@ const initialState: PhdGuideState = {
   loading: false,
 };
 
+// Async thunk to fetch guides
+export const getGuides = createAsyncThunk(
+  "phdGuide/getGuides",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await fetch("/api/phd-guide");
+      const data = await res.json();
+      return data.data as PhdGuide[];
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 const phdGuideSlice = createSlice({
   name: "phdGuide",
   initialState,
@@ -33,6 +47,22 @@ const phdGuideSlice = createSlice({
     setLoading(state, action: PayloadAction<boolean>) {
       state.loading = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getGuides.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        getGuides.fulfilled,
+        (state, action: PayloadAction<PhdGuide[]>) => {
+          state.items = action.payload;
+          state.loading = false;
+        }
+      )
+      .addCase(getGuides.rejected, (state) => {
+        state.loading = false;
+      });
   },
 });
 

@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 
 interface GalleryItem {
   _id: string;
@@ -20,6 +20,20 @@ const initialState: GalleryState = {
   loading: false,
 };
 
+// Async thunk to fetch gallery items
+export const getGallery = createAsyncThunk(
+  "gallery/getGallery",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await fetch("/api/gallery");
+      const data = await res.json();
+      return data.data as GalleryItem[];
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 const gallerySlice = createSlice({
   name: "gallery",
   initialState,
@@ -30,6 +44,22 @@ const gallerySlice = createSlice({
     setLoading(state, action: PayloadAction<boolean>) {
       state.loading = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getGallery.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        getGallery.fulfilled,
+        (state, action: PayloadAction<GalleryItem[]>) => {
+          state.items = action.payload;
+          state.loading = false;
+        }
+      )
+      .addCase(getGallery.rejected, (state) => {
+        state.loading = false;
+      });
   },
 });
 

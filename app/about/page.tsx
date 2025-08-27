@@ -9,7 +9,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Footer from "@/components/footer";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
-import { setExperience, setLoading } from "@/store/aboutSlice";
+import { getExperience, setExperience, setLoading } from "@/store/aboutSlice";
 
 // Loader component
 const Loader = () => (
@@ -18,7 +18,7 @@ const Loader = () => (
   </div>
 );
 
-const About = () => {
+const About = ({ experience }: { experience: any[] }) => {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const bioSectionRef = useRef<HTMLDivElement | null>(null);
   const imageRef = useRef<HTMLDivElement | null>(null);
@@ -27,7 +27,6 @@ const About = () => {
   const contributionsRef = useRef<HTMLDivElement | null>(null);
 
   const dispatch = useDispatch();
-  const experience = useSelector((state: RootState) => state.about.experience);
   const loading = useSelector((state: RootState) => state.about.loading);
 
   useEffect(() => {
@@ -162,18 +161,6 @@ const About = () => {
       ScrollTrigger.killAll();
     };
   }, []);
-
-  // Fetch Experience data
-  useEffect(() => {
-    const getExp = async () => {
-      dispatch(setLoading(true));
-      const res = await fetch("/api/getExperience");
-      const data = await res.json();
-      dispatch(setExperience(data.data));
-      dispatch(setLoading(false));
-    };
-    getExp();
-  }, [dispatch]);
 
   // Animate Experience cards when data is loaded
   useEffect(() => {

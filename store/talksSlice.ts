@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 
 interface Talk {
   _id: string;
@@ -20,6 +20,20 @@ const initialState: TalksState = {
   loading: false,
 };
 
+// Async thunk to fetch talks
+export const getTalks = createAsyncThunk(
+  "talks/getTalks",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await fetch("/api/talks");
+      const data = await res.json();
+      return data.data as Talk[];
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 const talksSlice = createSlice({
   name: "talks",
   initialState,
@@ -30,6 +44,19 @@ const talksSlice = createSlice({
     setLoading(state, action: PayloadAction<boolean>) {
       state.loading = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getTalks.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getTalks.fulfilled, (state, action: PayloadAction<Talk[]>) => {
+        state.items = action.payload;
+        state.loading = false;
+      })
+      .addCase(getTalks.rejected, (state) => {
+        state.loading = false;
+      });
   },
 });
 
