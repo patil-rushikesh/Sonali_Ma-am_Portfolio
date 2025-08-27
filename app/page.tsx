@@ -80,7 +80,7 @@ export default function HomePage() {
         <div className="absolute bottom-40 left-1/4 w-20 h-20 bg-gradient-to-br from-black/4 to-transparent rounded-full animate-float animate-delay-500"></div>
       </div>
 
-      <Navigation />
+      {/* <Navigation /> */}
 
       <section className="relative py-20 px-4 overflow-hidden">
         {/* Blurred background image, content stays sharp */}

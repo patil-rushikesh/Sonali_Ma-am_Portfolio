@@ -204,7 +204,7 @@ const About = () => {
       className="min-h-screen relative overflow-hidden"
       data-scroll-container
     >
-      <Navigation />
+      {/* <Navigation /> */}
 
       {/* About Section */}
       <section className="py-16 px-4">

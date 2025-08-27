@@ -83,7 +83,7 @@ export default function ContactPage() {
 
   return (
     <div ref={scrollRef} data-scroll-container className="min-h-screen">
-      <Navigation />
+      {/* <Navigation /> */}
 
       {/* Hero Section */}
       <section className=" px-4">

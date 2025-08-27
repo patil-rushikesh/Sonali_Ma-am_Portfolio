@@ -76,7 +76,7 @@ export default function GalleryPage() {
       data-scroll-container
       className={`min-h-screen${selectedItem ? " pointer-events-none" : ""}`}
     >
-      <Navigation />
+      {/* <Navigation /> */}
 
       {/* Hero Section */}
       <section className="py-16 px-4">

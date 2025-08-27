@@ -388,7 +388,7 @@ export default function IPRPage() {
 
 	return (
 		<div ref={scrollRef} data-scroll-container className="min-h-screen">
-			<Navigation />
+			{/* <Navigation /> */}
 
 			{/* Hero Section */}
 			<section className="py-16 px-4">

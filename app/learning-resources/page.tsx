@@ -139,7 +139,7 @@ export default function LearningResourcesPage() {
 
   return (
     <div ref={scrollRef} data-scroll-container className="min-h-screen">
-      <Navigation />
+      {/* <Navigation /> */}
       <div className="py-16 px-4 bg-muted/30">
         <div className="container mx-auto max-w-6xl">
           <h1 className="font-serif text-4xl md:text-5xl font-bold text-center mb-8">
