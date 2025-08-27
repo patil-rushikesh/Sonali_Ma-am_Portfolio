@@ -6,6 +6,16 @@ import { Button } from "@/components/ui/button"
 import { FileText, Shield, Lightbulb, Award, Calendar, ExternalLink } from "lucide-react"
 import { useEffect, useState, useRef } from "react"
 import Footer from '@/components/footer';
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
+import {
+  setPublicationData,
+  setPatentData,
+  setCopyrightData,
+  setStartupData,
+  setResearchGrantData,
+  setLoading,
+} from "@/store/iprSlice";
 
 const iprTypes = [
 	{
@@ -52,58 +62,6 @@ const patentsSubTabs = [
 	{ label: "National", value: "national" },
 ]
 
-interface Publication {
-	_id: string;
-	name: string;
-	description: string;
-	link: string;
-	createdAt: string;
-	updatedAt: string;
-	type: "journal" | "book";
-}
-
-interface Patent {
-	_id: string;
-	type: "International" | "National";
-	title: string;
-	date: string;
-	status: string;
-	number: string;
-	createdAt: string;
-	updatedAt: string;
-}
-
-interface Copyright {
-	_id: string;
-	title: string;
-	diaryNumber: string;
-	copyrightRegOf: string;
-	status: string;
-	createdAt: string;
-	updatedAt: string;
-}
-
-interface Startup {
-	_id: string;
-	name: string;
-	description: string;
-	status?: string;
-	image?: { url: string }; // Add image property (optional)
-	createdAt: string;
-	updatedAt: string;
-}
-
-interface ResearchGrant {
-	_id: string;
-	fundReceived: number;
-	title: string;
-	grantAgency: string;
-	currency: string;
-	startYear: number;
-	endYear: number;
-	createdAt: string;
-	updatedAt: string;
-}
 
 // Loader component
 const Loader = () => (
@@ -120,70 +78,77 @@ export default function IPRPage() {
 		patents: "international",
 	})
 
-	const [publicationData, setPublications] = useState<Publication[]>([])
-	const [patentData, setPatentData] = useState<Patent[]>([])
-	const [copyrightData, setCopyrightData] = useState<Copyright[]>([])
-	const [startupData, setStartupData] = useState<Startup[]>([])
-	const [researchGrantData, setResearchGrantData] = useState<ResearchGrant[]>([])
+	const dispatch = useDispatch();
+	const publicationData = useSelector((state: RootState) => state.ipr.publicationData);
+	const patentData = useSelector((state: RootState) => state.ipr.patentData);
+	const copyrightData = useSelector((state: RootState) => state.ipr.copyrightData);
+	const startupData = useSelector((state: RootState) => state.ipr.startupData);
+	const researchGrantData = useSelector((state: RootState) => state.ipr.researchGrantData);
 
 	useEffect(() => {
 		const getPublicationData = async () => {
-			// Fetch publication data from an API or database
+			dispatch(setLoading(true));
 			const response = await fetch("/api/publications")
 			const data = await response.json()
-			// Ensure each publication has a 'type' property
-			setPublications(
+			dispatch(setPublicationData(
 				(data.data || []).map((pub: any) => ({
 					...pub,
-					type: pub.type || "journal", // fallback to "journal" if type missing
+					type: pub.type || "journal",
 				}))
-			);
+			));
+			dispatch(setLoading(false));
 		}
-
 		getPublicationData()
-	}, [])
+	}, [dispatch])
 
 	useEffect(() => {
 		const getPatentsData = async () => {
+			dispatch(setLoading(true));
 			const response = await fetch("/api/patents")
 			const data = await response.json()
-			// Ensure each patent has a 'type' property (International/National)
-			setPatentData(
+			dispatch(setPatentData(
 				(data.data || []).map((pat: any) => ({
 					...pat,
 					type: pat.type === "International" ? "International" : "National"
 				}))
-			)
+			));
+			dispatch(setLoading(false));
 		}
 		getPatentsData()
-	}, [])
+	}, [dispatch])
 
 	useEffect(() => {
 		const getTradeSecretsData = async () => {
+			dispatch(setLoading(true));
 			const response = await fetch("/api/startup")
 			const data = await response.json()
-			setStartupData(data.data || []);
+			dispatch(setStartupData(data.data || []));
+			dispatch(setLoading(false));
 		}
 		getTradeSecretsData()
-	}, [])
+	}, [dispatch])
 
 	useEffect(() => {
 		const getCopyrightsData = async () => {
+			dispatch(setLoading(true));
 			const response = await fetch("/api/copyrights")
 			const data = await response.json()
-			setCopyrightData(data.data || []);
+			dispatch(setCopyrightData(data.data || []));
+			dispatch(setLoading(false));
 		}
 		getCopyrightsData();
-	}, [])
+	}, [dispatch])
 
 	useEffect(() => {
 		const ResearchGrants = async () => {
+			dispatch(setLoading(true));
 			const response = await fetch("/api/research-grants")
 			const data = await response.json()
-			setResearchGrantData(data.data || []);
+			dispatch(setResearchGrantData(data.data || []));
+			dispatch(setLoading(false));
 		}
 		ResearchGrants();
-	}, [])
+	}, [dispatch])
 
 	useEffect(() => {
 		let scroll: any

@@ -3,11 +3,13 @@ import { Navigation } from "@/components/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import axios from "axios";
 import Footer from "@/components/footer";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { setExperience, setLoading } from "@/store/aboutSlice";
 
 // Loader component
 const Loader = () => (
@@ -23,7 +25,10 @@ const About = () => {
   const timelineRef = useRef<HTMLDivElement | null>(null);
   const qualificationsRef = useRef<HTMLDivElement | null>(null);
   const contributionsRef = useRef<HTMLDivElement | null>(null);
-  const [experience, setExperience] = useState<any[] | null>(null);
+
+  const dispatch = useDispatch();
+  const experience = useSelector((state: RootState) => state.about.experience);
+  const loading = useSelector((state: RootState) => state.about.loading);
 
   useEffect(() => {
     let scroll: any = null;
@@ -161,11 +166,14 @@ const About = () => {
   // Fetch Experience data
   useEffect(() => {
     const getExp = async () => {
-      const res = await axios.get("/api/getExperience");
-      setExperience(res.data.data);
+      dispatch(setLoading(true));
+      const res = await fetch("/api/getExperience");
+      const data = await res.json();
+      dispatch(setExperience(data.data));
+      dispatch(setLoading(false));
     };
     getExp();
-  }, []);
+  }, [dispatch]);
 
   // Animate Experience cards when data is loaded
   useEffect(() => {
@@ -362,7 +370,7 @@ const About = () => {
             Professional Journey
           </h2>
           <div className="space-y-8">
-            {!experience && <Loader />}
+            {loading && <Loader />}
             {experience && experience.length === 0 && (
               <div className="text-center text-muted-foreground py-8">
                 No experience found.

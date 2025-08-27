@@ -11,6 +11,9 @@ import { Label } from "@/components/ui/label"
 import { Mail, Phone, MapPin, Send, Clock, MessageSquare } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import Footer from "@/components/footer";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { setLoading as setMapLoadingRedux } from "@/store/contactSlice";
 
 // Loader component
 const Loader = () => (
@@ -30,6 +33,8 @@ export default function ContactPage() {
   const [success, setSuccess] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const dispatch = useDispatch();
+  const mapLoading = useSelector((state: RootState) => state.contact.mapLoading);
 
   useEffect(() => {
     let scroll: any
@@ -227,7 +232,7 @@ export default function ContactPage() {
 
                 {/* Embedded Google Map */}
                 <div className="rounded-lg overflow-hidden shadow relative min-h-[300px]">
-                  {loading && (
+                  {mapLoading && (
                     <div className="absolute inset-0 flex items-center justify-center bg-background/70 z-10">
                       <Loader />
                     </div>
@@ -240,7 +245,7 @@ export default function ContactPage() {
                     allowFullScreen={true}
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
-                    onLoad={() => setLoading(false)}
+                    onLoad={() => dispatch(setMapLoadingRedux(false))}
                   ></iframe>
                 </div>
 

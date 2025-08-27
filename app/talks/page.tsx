@@ -12,7 +12,9 @@ import { Button } from "@/components/ui/button";
 import { CalendarDays, ExternalLink } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { setTalks, setLoading } from "@/store/talksSlice";
 import Footer from "@/components/footer";
 
 interface Talk {
@@ -36,7 +38,9 @@ const Loader = () => (
 );
 
 export default function TalksPage() {
-  const [talks, setTalks] = useState<Talk[]>([]);
+  const dispatch = useDispatch();
+  const talks = useSelector((state: RootState) => state.talks.items);
+  const loading = useSelector((state: RootState) => state.talks.loading);
   const [selectedTalk, setSelectedTalk] = useState<Talk | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -58,23 +62,16 @@ export default function TalksPage() {
 
   useEffect(() => {
     const getTalks = async () => {
-      try {
-        const res = await axios("/api/talks");
-        const data = res.data.data;
-        if (Array.isArray(data)) {
-          setTalks(data as Talk[]);
-        } else if (Array.isArray(data.talks)) {
-          setTalks(data.talks as Talk[]);
-        } else {
-          setTalks([]);
-        }
-      } catch (err) {
-        setTalks([]);
-        console.error("Failed to fetch talks:", err);
-      }
+      dispatch(setLoading(true));
+      const res = await fetch("/api/talks");
+      const data = await res.json();
+      dispatch(
+        setTalks(Array.isArray(data.data) ? data.data : data.data?.talks || [])
+      );
+      dispatch(setLoading(false));
     };
     getTalks();
-  }, []);
+  }, [dispatch]);
 
   return (
     <div ref={scrollRef} data-scroll-container className="min-h-screen">
@@ -97,7 +94,7 @@ export default function TalksPage() {
       {/* Talks Grid */}
       <section className="px-4">
         <div className="container mx-auto max-w-6xl">
-          {!talks.length ? (
+          {loading ? (
             <Loader />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -247,3 +244,4 @@ export default function TalksPage() {
     </div>
   );
 }
+

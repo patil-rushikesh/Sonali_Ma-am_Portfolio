@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { ExternalLink } from "lucide-react";
 import { Navigation } from "@/components/navigation";
 import Footer from "@/components/footer";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { setResources, setLoading } from "@/store/learningResourcesSlice";
 
 // Loader component
 const Loader = () => (
@@ -24,8 +27,9 @@ interface LearningResource {
 }
 
 export default function LearningResourcesPage() {
-  const [resources, setResources] = useState<LearningResource[]>([]);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  const resources = useSelector((state: RootState) => state.learningResources.items);
+  const loading = useSelector((state: RootState) => state.learningResources.loading);
   const [selectedItem, setSelectedItem] = useState<LearningResource | null>(null);
   const [tab, setTab] = useState<"all" | "video" | "drive">("all");
   const modalRef = useRef<HTMLDivElement>(null);
@@ -49,13 +53,14 @@ export default function LearningResourcesPage() {
 
   useEffect(() => {
     const fetchData = async () => {
+      dispatch(setLoading(true));
       const res = await fetch("/api/learning-resources");
       const data = await res.json();
-      setResources(data.data || []);
-      setLoading(false);
+      dispatch(setResources(data.data || []));
+      dispatch(setLoading(false));
     };
     fetchData();
-  }, []);
+  }, [dispatch]);
 
   // Helper to render media preview
   function renderPreview(item: LearningResource) {
@@ -302,4 +307,3 @@ export default function LearningResourcesPage() {
     </div>
   );
 }
-  

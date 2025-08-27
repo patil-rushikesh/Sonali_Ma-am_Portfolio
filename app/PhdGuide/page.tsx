@@ -1,8 +1,11 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Navigation } from "@/components/navigation";
 import Footer from "@/components/footer";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { setGuides, setLoading } from "@/store/phdGuideSlice";
 
 // Loader component
 const Loader = () => (
@@ -25,9 +28,10 @@ interface PhdGuide {
 }
 
 export default function PhdGuidePage() {
-  const [guides, setGuides] = useState<PhdGuide[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedItem, setSelectedItem] = useState<PhdGuide | null>(null);
+  const dispatch = useDispatch();
+  const guides = useSelector((state: RootState) => state.phdGuide.items);
+  const loading = useSelector((state: RootState) => state.phdGuide.loading);
+  const [selectedItem, setSelectedItem] = React.useState<PhdGuide | null>(null);
   const modalRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -48,13 +52,14 @@ export default function PhdGuidePage() {
 
   useEffect(() => {
     const fetchData = async () => {
+      dispatch(setLoading(true));
       const res = await fetch("/api/phd-guide");
       const data = await res.json();
-      setGuides(data.data || []);
-      setLoading(false);
+      dispatch(setGuides(data.data || []));
+      dispatch(setLoading(false));
     };
     fetchData();
-  }, []);
+  }, [dispatch]);
 
   // Modal logic: prevent background scroll and focus trap
   useEffect(() => {

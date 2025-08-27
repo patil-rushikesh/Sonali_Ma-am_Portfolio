@@ -4,6 +4,9 @@ import { Navigation } from "@/components/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { Fragment, useRef, useEffect, useState } from "react"
 import Footer from "@/components/footer"
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { setGallery, setLoading } from "@/store/gallerySlice";
 import {
   Dialog,
   DialogContent,
@@ -32,23 +35,13 @@ const Loader = () => (
 );
 
 export default function GalleryPage() {
-  
-
-  const [gallery, setGallery] = useState<GalleryItem[]>([])
-  const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null)
-  const modalRef = useRef<HTMLDivElement>(null)
-  const scrollRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const fetchGalleryItems = async () => {
-      const response = await fetch("/api/gallery")
-      const data = await response.json();
-      console.log(data.data);
-      setGallery(data.data)
-    }
-
-    fetchGalleryItems()
-  }, [])
+  const dispatch = useDispatch();
+  const gallery = useSelector((state: RootState) => state.gallery.items);
+  const loading = useSelector((state: RootState) => state.gallery.loading);
+  const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const locomotiveScrollInstance = useRef<any>(null);
 
   useEffect(() => {
     let scroll: any
@@ -59,14 +52,30 @@ export default function GalleryPage() {
         smooth: true,
         lerp: 0.08,
       })
+      locomotiveScrollInstance.current = scroll
     })
     return () => {
       if (scroll) scroll.destroy()
     }
   }, [])
 
+  useEffect(() => {
+    dispatch(setLoading(true));
+    const fetchGalleryItems = async () => {
+      const response = await fetch("/api/gallery")
+      const data = await response.json();
+      dispatch(setGallery(data.data || []));
+      dispatch(setLoading(false));
+    }
+    fetchGalleryItems()
+  }, [dispatch])
+
   return (
-    <div ref={scrollRef} data-scroll-container className="min-h-screen">
+    <div
+      ref={scrollRef}
+      data-scroll-container
+      className={`min-h-screen${selectedItem ? " pointer-events-none" : ""}`}
+    >
       <Navigation />
 
       {/* Hero Section */}
@@ -85,8 +94,14 @@ export default function GalleryPage() {
       {/* Gallery Grid */}
       <section className="px-4">
         <div className="container mx-auto max-w-6xl">
-          {!gallery.length ? (
+          {loading ? (
             <Loader />
+          ) : !gallery.length ? (
+            <Card>
+              <CardContent className="p-6 text-center">
+                No gallery items found.
+              </CardContent>
+            </Card>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {gallery.map((item, index) => (

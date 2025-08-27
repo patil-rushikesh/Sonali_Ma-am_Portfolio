@@ -1,7 +1,9 @@
-import type React from "react"
+// import type React from "react"
 import type { Metadata } from "next"
 import { Playfair_Display, DM_Sans } from "next/font/google"
 import "./globals.css"
+
+import Maincomponent from "./Maincomponent"
 
 const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
@@ -28,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${playfairDisplay.variable} ${dmSans.variable} antialiased`}>
-      <body className="h-screen bg-background text-foreground">{children}</body>
+      <body className="h-screen bg-background text-foreground"><Maincomponent children={children}/></body>
     </html>
   )
 }

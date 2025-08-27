@@ -9,18 +9,11 @@ import Link from "next/link";
 import { Award, Shield, Lightbulb } from "lucide-react"
 import { useRef, useEffect, useState } from "react";
 import Footer from "@/components/footer";
-interface Testimonial {
-  _id: string;
-  name: string;
-  position: string;
-  paragraph: string;
-  image: {
-    url: string;
-    publicId: string;
-  };
-  createdAt: string;
-  updatedAt: string;
-}
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { setTestimonials, setLoading } from "@/store/testimonialsSlice";
+
+
 
 // Loader component
 const Loader = () => (
@@ -31,12 +24,15 @@ const Loader = () => (
 
 export default function HomePage() {
   const scrollRef = useRef<HTMLDivElement | null>(null);
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const dispatch = useDispatch();
+  const testimonials = useSelector((state: RootState) => state.testimonials.items);
+  const loading = useSelector((state: RootState) => state.testimonials.loading);
 
   const fetchTestimonials = async () => {
+    dispatch(setLoading(true));
     const testimonials = await axios.get("/api/testimonials");
-    console.log(testimonials.data);
-    setTestimonials(testimonials.data.data);
+    dispatch(setTestimonials(testimonials.data.data));
+    dispatch(setLoading(false));
   };
 
   useEffect(() => {
@@ -203,45 +199,49 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {!testimonials.length ? (
-              <Loader />
-            ) : (
-              testimonials.map((testimonial) => (
-                <Card
-                  key={testimonial._id}
-                  className="bg-white dark:bg-zinc-900 shadow-lg hover:shadow-xl transition-shadow duration-300"
-                >
-                  <CardContent className="p-6">
-                    <div className="flex mb-4 items-center gap-4">
-                      {testimonial.image?.url && (
-                        <img
-                          src={testimonial.image.url}
-                          alt={testimonial.name}
-                          className="w-12 h-12 rounded-full object-cover border"
-                        />
-                      )}
-                      <div>
-                        <p className="font-semibold text-foreground">
-                          {testimonial.name}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {testimonial.position}
-                        </p>
+          {loading ? (
+            <Loader />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {!testimonials.length ? (
+                <Loader />
+              ) : (
+                testimonials.map((testimonial) => (
+                  <Card
+                    key={testimonial._id}
+                    className="bg-white dark:bg-zinc-900 shadow-lg hover:shadow-xl transition-shadow duration-300"
+                  >
+                    <CardContent className="p-6">
+                      <div className="flex mb-4 items-center gap-4">
+                        {testimonial.image?.url && (
+                          <img
+                            src={testimonial.image.url}
+                            alt={testimonial.name}
+                            className="w-12 h-12 rounded-full object-cover border"
+                          />
+                        )}
+                        <div>
+                          <p className="font-semibold text-foreground">
+                            {testimonial.name}
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            {testimonial.position}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                    <p className="text-muted-foreground mb-6 leading-relaxed">
-                      "{testimonial.paragraph}"
-                    </p>
-                    <div className="border-t pt-4 text-xs text-muted-foreground">
-                      Added:{" "}
-                      {new Date(testimonial.createdAt).toLocaleDateString()}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))
-            )}
-          </div>
+                      <p className="text-muted-foreground mb-6 leading-relaxed">
+                        "{testimonial.paragraph}"
+                      </p>
+                      <div className="border-t pt-4 text-xs text-muted-foreground">
+                        Added:{" "}
+                        {new Date(testimonial.createdAt).toLocaleDateString()}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))
+              )}
+            </div>
+          )}
         </div>
       </section>
 
