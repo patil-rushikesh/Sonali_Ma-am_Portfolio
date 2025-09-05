@@ -140,7 +140,7 @@ const About = ({ experience: propExperience }: { experience: any[] }) => {
             scrollTrigger: {
               trigger: qualificationsRef.current,
               scroller: scrollRef.current,
-              start: "top 100%",
+              start: "top 105%",
               end: "bottom 0%",
               scrub: false,
             },
@@ -161,7 +161,7 @@ const About = ({ experience: propExperience }: { experience: any[] }) => {
             scrollTrigger: {
               trigger: contributionsRef.current,
               scroller: scrollRef.current,
-              start: "top 100%",
+              start: "top 105%",
               end: "bottom 0%",
               scrub: false,
             },
