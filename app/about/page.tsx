@@ -140,8 +140,8 @@ const About = ({ experience: propExperience }: { experience: any[] }) => {
             scrollTrigger: {
               trigger: qualificationsRef.current,
               scroller: scrollRef.current,
-              start: "top 85%",
-              end: "bottom 60%",
+              start: "top 100%",
+              end: "bottom 0%",
               scrub: false,
             },
           }
@@ -161,8 +161,8 @@ const About = ({ experience: propExperience }: { experience: any[] }) => {
             scrollTrigger: {
               trigger: contributionsRef.current,
               scroller: scrollRef.current,
-              start: "top 85%",
-              end: "bottom 60%",
+              start: "top 100%",
+              end: "bottom 0%",
               scrub: false,
             },
           }
@@ -190,29 +190,7 @@ const About = ({ experience: propExperience }: { experience: any[] }) => {
       gsap.set(card, { clearProps: "all" });
     });
 
-    const cards = timelineRef.current.querySelectorAll(".timeline-card");
 
-    // if (cards.length > 0) {
-    //   gsap.fromTo(
-    //     cards,
-    //     { y: 80, opacity: 0, scale: 0.95 },
-    //     {
-    //       y: 0,
-    //       opacity: 1,
-    //       scale: 1,
-    //       duration: 1,
-    //       ease: "power3.out",
-    //       stagger: 0.25,
-    //       scrollTrigger: {
-    //         trigger: timelineRef.current,
-    //         scroller: scrollRef.current,
-    //         start: "top 100%",
-    //         end: "bottom 100%",
-    //         once: true,
-    //       },
-    //     }
-    //   );
-    // }
   }, [experience]);
 
   return (
