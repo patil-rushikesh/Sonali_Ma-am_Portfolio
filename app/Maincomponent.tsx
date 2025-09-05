@@ -28,6 +28,7 @@ const DataLoader = ({ children }: { children: ReactNode }) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    let isMounted = true;
     if (loadingRef.current) {
       gsap.fromTo(
         loadingRef.current,
@@ -36,7 +37,12 @@ const DataLoader = ({ children }: { children: ReactNode }) => {
       );
     }
 
-    Promise.all([
+    // Track loading for all requests
+    let finished = 0;
+    const total = 11;
+    setLoading(true);
+
+    const requests = [
       dispatch(getPublicationData()),
       dispatch(getPatentData()),
       dispatch(getCopyrightData()),
@@ -48,31 +54,15 @@ const DataLoader = ({ children }: { children: ReactNode }) => {
       dispatch(getGuides()),
       dispatch(getTalks()),
       dispatch(getTestimonials()),
-    ]).then(() => {
-      const state = store.getState();
-      // console.log("Fetched Data:", {
-      //   publicationData: state.ipr.publicationData,
-      //   patentData: state.ipr.patentData,
-      //   copyrightData: state.ipr.copyrightData,
-      //   startupData: state.ipr.startupData,
-      //   researchGrantData: state.ipr.researchGrantData,
-      //   experience: state.about.experience,
-      //   gallery: state.gallery.items,
-      //   resources: state.learningResources.items,
-      //   guides: state.phdGuide.items,
-      //   talks: state.talks.items,
-      //   testimonials: state.testimonials.items,
-      // });
+    ];
 
-      // Animate counter
-      gsap.to({ val: 0 }, {
-        val: 100,
-        duration: 2,
-        ease: "power1.inOut",
-        onUpdate: function () {
-          setCounter(Math.round(this.targets()[0].val));
-        },
-        onComplete: () => {
+    requests.forEach((req) => {
+      Promise.resolve(req).finally(() => {
+        finished += 1;
+        // Animate counter as requests finish
+        setCounter(Math.round((finished / total) * 100));
+        if (finished === total && isMounted) {
+          // Animate loading out
           if (loadingRef.current) {
             gsap.to(loadingRef.current, {
               opacity: 0,
@@ -84,11 +74,12 @@ const DataLoader = ({ children }: { children: ReactNode }) => {
           } else {
             setLoading(false);
           }
-        },
+        }
       });
     });
 
     return () => {
+      isMounted = false;
       gsap.killTweensOf(loadingRef.current);
     };
   }, [dispatch]);
@@ -121,7 +112,6 @@ const DataLoader = ({ children }: { children: ReactNode }) => {
     );
   }
 
-      
   return <><Navigation />{children}</>;
 };
 
