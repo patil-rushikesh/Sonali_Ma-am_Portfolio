@@ -9,7 +9,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Footer from "@/components/footer";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
-import { getExperience, setExperience, setLoading } from "@/store/aboutSlice";
+import { setExperience, setLoading } from "@/store/aboutSlice";
 
 // Loader component
 const Loader = () => (
@@ -126,49 +126,6 @@ const About = ({ experience: propExperience }: { experience: any[] }) => {
           },
         });
       }
-
-      // Academic Qualifications Animation
-      if (qualificationsRef.current) {
-        gsap.fromTo(
-          qualificationsRef.current,
-          { y: 80, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 1,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: qualificationsRef.current,
-              scroller: scrollRef.current,
-              start: "top 105%",
-              end: "bottom 0%",
-              scrub: false,
-            },
-          }
-        );
-      }
-
-      // Other Contributions Animation
-      if (contributionsRef.current) {
-        gsap.fromTo(
-          contributionsRef.current,
-          { y: 80, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 1,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: contributionsRef.current,
-              scroller: scrollRef.current,
-              start: "top 105%",
-              end: "bottom 0%",
-              scrub: false,
-            },
-          }
-        );
-      }
-
       ScrollTrigger.addEventListener("refresh", () => scroll && scroll.update());
       ScrollTrigger.refresh();
     });
