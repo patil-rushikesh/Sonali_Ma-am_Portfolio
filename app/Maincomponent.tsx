@@ -37,7 +37,6 @@ const DataLoader = ({ children }: { children: ReactNode }) => {
       );
     }
 
-    // Track loading for all requests
     let finished = 0;
     const total = 11;
     setLoading(true);
