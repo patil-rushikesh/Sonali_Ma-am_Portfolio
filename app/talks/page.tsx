@@ -1,5 +1,4 @@
 "use client";
-import { Navigation } from "@/components/navigation";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   Dialog,
@@ -16,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { setTalks, setLoading } from "@/store/talksSlice";
 import Footer from "@/components/footer";
-import {ElegantCarousel} from "@/components/elegant-carousel";
+import { ElegantCarousel } from "@/components/elegant-carousel";
 const carouselItems = [
   {
     id: 1,
@@ -36,7 +35,7 @@ const carouselItems = [
     headline: "Abstract Geometry",
     description: "Finding beauty in the simplicity of geometric forms and patterns",
   }
-]
+];
 interface Talk {
   _id: string;
   name: string;
@@ -63,9 +62,16 @@ export default function TalksPage() {
   const loading = useSelector((state: RootState) => state.talks.loading);
   const [selectedTalk, setSelectedTalk] = useState<Talk | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
     let scroll: any;
     import("locomotive-scroll").then((LocomotiveScroll) => {
       if (!scrollRef.current) return;
@@ -78,9 +84,11 @@ export default function TalksPage() {
     return () => {
       if (scroll) scroll.destroy();
     };
-  }, []);
+  }, [mounted]);
 
   useEffect(() => {
+    if (!mounted) return;
+
     const getTalks = async () => {
       dispatch(setLoading(true));
       const res = await fetch("/api/talks");
@@ -91,7 +99,37 @@ export default function TalksPage() {
       dispatch(setLoading(false));
     };
     getTalks();
-  }, [dispatch]);
+  }, [dispatch, mounted]);
+
+  const formatDate = (dateString: string) => {
+    if (!mounted) return "";
+    return new Date(dateString).toLocaleDateString();
+  };
+
+  const formatDateTime = (dateString: string) => {
+    if (!mounted) return "";
+    return new Date(dateString).toLocaleString();
+  };
+
+  if (!mounted) {
+    return (
+      <div className="min-h-screen">
+        <section className="pt-16 px-4">
+          <div className="container mx-auto max-w-6xl text-center">
+            <h1 className="font-serif text-4xl md:text-5xl font-bold text-foreground mb-6">
+              Talks Delivered
+            </h1>
+            <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
+              A collection of presentations, keynotes, and speaking engagements
+              delivered across various conferences, summits, and professional
+              gatherings worldwide.
+            </p>
+          </div>
+        </section>
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div ref={scrollRef} data-scroll-container className="min-h-screen">
@@ -151,7 +189,7 @@ export default function TalksPage() {
                     </p>
                     <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4">
                       <CalendarDays className="w-4 h-4" />
-                      <span>{new Date(talk.createdAt).toLocaleDateString()}</span>
+                      <span>{formatDate(talk.createdAt)}</span>
                     </div>
                     <Button
                       asChild
@@ -193,7 +231,7 @@ export default function TalksPage() {
                       className="rounded-lg object-cover border"
                     />
                     <div className="text-sm text-muted-foreground text-center">
-                      {new Date(selectedTalk.createdAt).toLocaleString()}
+                      {formatDateTime(selectedTalk.createdAt)}
                     </div>
                   </div>
                 </DialogDescription>
