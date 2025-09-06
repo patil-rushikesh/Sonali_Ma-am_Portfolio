@@ -165,7 +165,7 @@ export default function HomePage() {
       </section>
 
       <section className=" px-40 bg-muted/30">
-        <ElegantCarousel items={carouselItems} autoPlay={true} autoPlayInterval={6000} />
+        <ElegantCarousel items={carouselItems} autoPlay={true} autoPlayInterval={1500} />
       </section>
       
       {/* IPR Importance Section */}

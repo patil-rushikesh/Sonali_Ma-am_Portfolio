@@ -100,7 +100,7 @@ export function ElegantCarousel({ items, autoPlay = false, autoPlayInterval = 50
         <Button
           variant="outline"
           size="icon"
-          className="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 bg-background/90 backdrop-blur-sm border-border hover:bg-accent hover:border-accent-foreground/20 transition-all duration-200 w-8 h-8 sm:w-10 sm:h-10"
+          className="absolute left-1 sm:left-2 rounded-full top-1/2 -translate-y-1/2 bg-background/90 backdrop-blur-sm border-border hover:bg-accent hover:border-accent-foreground/20 transition-all duration-200 w-8 h-8 sm:w-10 sm:h-10"
           onClick={goToPrevious}
           aria-label="Previous image"
         >
@@ -110,7 +110,7 @@ export function ElegantCarousel({ items, autoPlay = false, autoPlayInterval = 50
         <Button
           variant="outline"
           size="icon"
-          className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 bg-background/90 backdrop-blur-sm border-border hover:bg-accent hover:border-accent-foreground/20 transition-all duration-200 w-8 h-8 sm:w-10 sm:h-10"
+          className="absolute right-1 sm:right-2 rounded-full top-1/2 -translate-y-1/2 bg-background/90 backdrop-blur-sm border-border hover:bg-accent hover:border-accent-foreground/20 transition-all duration-200 w-8 h-8 sm:w-10 sm:h-10"
           onClick={goToNext}
           aria-label="Next image"
         >

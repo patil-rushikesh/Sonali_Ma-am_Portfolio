@@ -16,7 +16,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { setTalks, setLoading } from "@/store/talksSlice";
 import Footer from "@/components/footer";
-
+import {ElegantCarousel} from "@/components/elegant-carousel";
+const carouselItems = [
+  {
+    id: 1,
+    image: "/sonaliPatilherobg.jpg",
+    headline: "Modern Architecture",
+    description: "Exploring the intersection of form and function in contemporary design",
+  },
+  {
+    id: 2,
+    image: "/sonaliPatilherobg.jpg",
+    headline: "Portrait Studies",
+    description: "Capturing the essence of human emotion through minimalist composition",
+  },
+  {
+    id: 3,
+    image: "/sonaliPatilherobg.jpg",
+    headline: "Abstract Geometry",
+    description: "Finding beauty in the simplicity of geometric forms and patterns",
+  }
+]
 interface Talk {
   _id: string;
   name: string;
@@ -78,7 +98,7 @@ export default function TalksPage() {
       {/* <Navigation /> */}
 
       {/* Hero Section */}
-      <section className="py-16 px-4">
+      <section className="pt-16 px-4">
         <div className="container mx-auto max-w-6xl text-center">
           <h1 className="font-serif text-4xl md:text-5xl font-bold text-foreground mb-6">
             Talks Delivered
@@ -89,6 +109,9 @@ export default function TalksPage() {
             gatherings worldwide.
           </p>
         </div>
+      </section>
+      <section className="bg-muted/30">
+        <ElegantCarousel items={carouselItems} autoPlay={true} autoPlayInterval={1500} />
       </section>
 
       {/* Talks Grid */}
