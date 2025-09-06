@@ -99,10 +99,8 @@ export default function HomePage() {
         <div className="absolute bottom-40 left-1/4 w-20 h-20 bg-gradient-to-br from-black/4 to-transparent rounded-full animate-float animate-delay-500"></div>
       </div>
 
-      {/* <Navigation /> */}
 
       <section className="relative py-20 px-4 overflow-hidden">
-        {/* Blurred background image, content stays sharp */}
         <div
           className="pointer-events-none absolute inset-0 z-0 w-full h-full"
           aria-hidden="true"
@@ -269,8 +267,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <Footer />
-      {/* GSAP animation for highlight boxes */}
       <script suppressHydrationWarning>{`
         if (typeof window !== 'undefined') {
           import('gsap').then(gsap => {

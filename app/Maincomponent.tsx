@@ -20,6 +20,7 @@ import { getTalks } from "@/store/talksSlice";
 import { getTestimonials } from "@/store/testimonialsSlice";
 
 import { useAppDispatch } from "@/store/hooks";
+import Footer from "@/components/footer";
 
 const DataLoader = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
@@ -111,7 +112,8 @@ const DataLoader = ({ children }: { children: ReactNode }) => {
     );
   }
 
-  return <><Navigation />{children}</>;
+      
+  return <><Navigation />{children}<Footer /></>;
 };
 
 const Maincomponent = ({ children }: { children: ReactNode }) => {
