@@ -5,22 +5,33 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Fragment, useRef, useEffect, useState } from "react"
 import Footer from "@/components/footer"
 import { ElegantCarousel } from "@/components/elegant-carousel";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { Eye } from "lucide-react"
 
 const certificateItems = [
   {
     id: 1,
+    logo: "/sonaliPatilherobg.jpg",
     image: "/sonaliPatilherobg.jpg",
     headline: "AWS Solutions Architect",
     description: "Professional certification in cloud architecture and solutions design",
   },
   {
     id: 2,
+    logo: "/sonaliPatilherobg.jpg",
     image: "/sonaliPatilherobg.jpg",
     headline: "Microsoft Azure Expert",
     description: "Advanced certification in Azure cloud services and implementation",
   },
   {
     id: 3,
+    logo: "/sonaliPatilherobg.jpg",
     image: "/sonaliPatilherobg.jpg",
     headline: "Google Cloud Professional",
     description: "Expert-level certification in Google Cloud Platform technologies",
@@ -57,6 +68,10 @@ const Loader = () => (
 export default function GalleryPage() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const locomotiveScrollInstance = useRef<any>(null);
+  const [selectedCertificate, setSelectedCertificate] = useState<typeof certificateItems[0] | null>(null);
+  const [certificateDialogOpen, setCertificateDialogOpen] = useState(false);
+  const [selectedRecognition, setSelectedRecognition] = useState<any>(null);
+  const [recognitionDialogOpen, setRecognitionDialogOpen] = useState(false);
 
   useEffect(() => {
     let scroll: any
@@ -74,6 +89,17 @@ export default function GalleryPage() {
     }
   }, [])
 
+  const handleViewCertificate = (cert: typeof certificateItems[0], e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedCertificate(cert);
+    setCertificateDialogOpen(true);
+  };
+
+  const handleViewRecognition = (recognition: any) => {
+    setSelectedRecognition(recognition);
+    setRecognitionDialogOpen(true);
+  };
+
   return (
     <div
       ref={scrollRef}
@@ -81,7 +107,6 @@ export default function GalleryPage() {
       className="min-h-screen"
     >
       {/* <Navigation /> */}
-
       {/* Certificates Section */}
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-6xl">
@@ -102,21 +127,28 @@ export default function GalleryPage() {
                 <div className="relative overflow-hidden">
                   <div className="bg-gradient-to-br from-blue-50 to-indigo-100 p-6 h-48 flex items-center justify-center">
                     <div className="text-center">
-                      <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </div>
+                      <img src={cert.image} alt={cert.headline} className="w-24 h-24 object-cover rounded-full mx-auto mb-4" />
                       <h3 className="font-serif text-lg font-bold text-blue-800">{cert.headline}</h3>
                     </div>
                   </div>
                 </div>
                 <CardContent className="p-4">
-                  <p className="text-muted-foreground text-sm leading-relaxed">
+                  <p className="text-muted-foreground text-sm leading-relaxed mb-4">
                     {cert.description}
                   </p>
-                  <div className="mt-4 text-xs text-blue-600 font-medium">
-                    Verified Certificate
+                  <div className="flex items-center justify-between">
+                    <div className="text-xs text-blue-600 font-medium">
+                      Verified Certificate
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={(e) => handleViewCertificate(cert, e)}
+                      className="text-xs"
+                    >
+                      <Eye className="w-3 h-3 mr-1" />
+                      View Certificate
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -124,6 +156,33 @@ export default function GalleryPage() {
           </div>
         </div>
       </section>
+
+      {/* Certificate Popup Dialog */}
+      <Dialog open={certificateDialogOpen} onOpenChange={setCertificateDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-auto">
+          {selectedCertificate && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-xl font-serif">{selectedCertificate.headline}</DialogTitle>
+              </DialogHeader>
+              <div className="mt-4">
+                <div className="flex justify-center">
+                  <img
+                    src={selectedCertificate.image}
+                    alt={selectedCertificate.headline}
+                    className="max-w-full max-h-[70vh] object-contain rounded-lg shadow-lg"
+                  />
+                </div>
+                <div className="mt-4 text-center">
+                  <p className="text-muted-foreground">
+                    {selectedCertificate.description}
+                  </p>
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* Awards Section */}
       <section className="py-16 px-4 bg-muted/30">
@@ -141,7 +200,7 @@ export default function GalleryPage() {
 
       {/* Recognitions Section */}
       <section className="py-16 px-4">
-        <div className="container mx-auto max-w-4xl">
+        <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-4">Industry Recognitions</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -149,31 +208,37 @@ export default function GalleryPage() {
               conferences, and professional organizations.
             </p>
           </div>
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
               {
                 year: "2024",
                 title: "Featured Speaker at Tech Summit 2024",
                 organization: "Global Technology Conference",
-                description: "Keynote presentation on 'Future of Cloud Computing and AI Integration'"
+                description: "Keynote presentation on 'Future of Cloud Computing and AI Integration'",
+                hasImage: true,
+                image: "/sonaliPatilherobg.jpg"
               },
               {
                 year: "2023",
                 title: "Top 40 Under 40 in Technology",
                 organization: "Tech Leaders Magazine",
-                description: "Recognized for innovative contributions to enterprise software solutions"
+                description: "Recognized for innovative contributions to enterprise software solutions",
+                hasImage: false
               },
               {
                 year: "2023",
                 title: "Best Paper Award",
                 organization: "International Software Engineering Conference",
-                description: "Research paper on scalable microservices architecture patterns"
+                description: "Research paper on scalable microservices architecture patterns",
+                hasImage: true,
+                image: "/sonaliPatilherobg.jpg"
               },
               {
                 year: "2022",
                 title: "Women in Tech Leadership Award",
                 organization: "Technology Excellence Foundation",
-                description: "Honored for mentoring and promoting diversity in technology leadership"
+                description: "Honored for mentoring and promoting diversity in technology leadership",
+                hasImage: false
               }
             ].map((recognition, index) => (
               <Card
@@ -182,22 +247,33 @@ export default function GalleryPage() {
                 style={{ animationDelay: `${index * 150}ms` }}
               >
                 <CardContent className="p-6">
-                  <div className="flex flex-col md:flex-row md:items-start gap-4">
+                  <div className="flex items-start gap-4">
                     <div className="flex-shrink-0">
-                      <div className="w-16 h-16 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center">
-                        <span className="text-white font-bold text-sm">{recognition.year}</span>
+                      <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center">
+                        <span className="text-white font-bold text-xs">{recognition.year}</span>
                       </div>
                     </div>
                     <div className="flex-grow">
-                      <h3 className="font-serif text-xl font-bold text-foreground mb-2">
+                      <h3 className="font-serif text-lg font-bold text-foreground mb-2">
                         {recognition.title}
                       </h3>
-                      <div className="text-primary font-medium mb-2">
+                      <div className="text-primary font-medium mb-2 text-sm">
                         {recognition.organization}
                       </div>
-                      <p className="text-muted-foreground leading-relaxed">
+                      <p className="text-muted-foreground leading-relaxed mb-4 text-sm">
                         {recognition.description}
                       </p>
+                      {recognition.hasImage && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleViewRecognition(recognition)}
+                          className="text-xs"
+                        >
+                          <Eye className="w-3 h-3 mr-1" />
+                          View
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </CardContent>
@@ -206,6 +282,36 @@ export default function GalleryPage() {
           </div>
         </div>
       </section>
+
+      {/* Recognition Image Popup Dialog */}
+      <Dialog open={recognitionDialogOpen} onOpenChange={setRecognitionDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-auto">
+          {selectedRecognition && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-xl font-serif">{selectedRecognition.title}</DialogTitle>
+              </DialogHeader>
+              <div className="mt-4">
+                <div className="flex justify-center">
+                  <img
+                    src={selectedRecognition.image}
+                    alt={selectedRecognition.title}
+                    className="max-w-full max-h-[70vh] object-contain rounded-lg shadow-lg"
+                  />
+                </div>
+                <div className="mt-4 text-center">
+                  <div className="text-primary font-medium mb-2">
+                    {selectedRecognition.organization}
+                  </div>
+                  <p className="text-muted-foreground">
+                    {selectedRecognition.description}
+                  </p>
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* Recognition Statistics */}
       <section className="py-16 px-4">
