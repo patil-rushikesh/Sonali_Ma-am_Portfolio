@@ -205,7 +205,15 @@ export default function IPRPage() {
 	// Helper to render content for each tab/sub-tab
 	function renderTabContent() {
 		if (activeTab === "publication") {
-			if (!publicationData.length) return <Loader />;
+			if (!publicationData.length) {
+				return (
+					<Card className="mb-4">
+						<CardContent className="p-6 text-center">
+							No Publication data found.
+						</CardContent>
+					</Card>
+				);
+			}
 			const filtered = publicationData.filter(
 				(pub) => pub.type === activeSubTab.publication
 			);
@@ -245,7 +253,15 @@ export default function IPRPage() {
 			}
 		}
 		if (activeTab === "patents") {
-			if (!patentData.length) return <Loader />;
+			if (!patentData.length) {
+				return (
+					<Card className="mb-4">
+						<CardContent className="p-6 text-center">
+							No Patent data found.
+						</CardContent>
+					</Card>
+				);
+			}
 			const filtered = patentData.filter(
 				(pat) =>
 					(activeSubTab.patents === "international" && pat.type === "International") ||
@@ -281,7 +297,15 @@ export default function IPRPage() {
 			)
 		}
 		if (activeTab === "copyrights") {
-			if (!copyrightData.length) return <Loader />;
+			if (!copyrightData.length) {
+				return (
+					<Card className="mb-4">
+						<CardContent className="p-6 text-center">
+							No Copyright data found.
+						</CardContent>
+					</Card>
+				);
+			}
 			return (
 				<div>
 					{copyrightData.length === 0 && (
@@ -312,7 +336,15 @@ export default function IPRPage() {
 			)
 		}
 		if (activeTab === "startups") {
-			if (!startupData.length) return <Loader />;
+			if (!startupData.length) {
+				return (
+					<Card className="mb-4">
+						<CardContent className="p-6 text-center">
+							No Startup data found.
+						</CardContent>
+					</Card>
+				);
+			}
 			return (
 				<div>
 					{startupData.length === 0 && (
@@ -353,7 +385,15 @@ export default function IPRPage() {
 			)
 		}
 		if (activeTab === "research-grant") {
-			if (!researchGrantData.length) return <Loader />;
+			if (!researchGrantData.length) {
+				return (
+					<Card className="mb-4">
+						<CardContent className="p-6 text-center">
+							No Research Grant data found.
+						</CardContent>
+					</Card>
+				);
+			}
 			return (
 				<div>
 					{researchGrantData.length === 0 && (
