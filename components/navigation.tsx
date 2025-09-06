@@ -43,7 +43,6 @@ const groupedNavigation = [
 		label: "Connect",
 		items: [
 			{ name: "Contact", href: "/contact" },
-			{ name: "Live Chat", href: "/live-chat" },
 		],
 	},
 ]
