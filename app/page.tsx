@@ -267,6 +267,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      <Footer />
       <script suppressHydrationWarning>{`
         if (typeof window !== 'undefined') {
           import('gsap').then(gsap => {
